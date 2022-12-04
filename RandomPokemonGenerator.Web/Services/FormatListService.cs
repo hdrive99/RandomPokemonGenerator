@@ -15,21 +15,22 @@ namespace RandomPokemonGenerator.Web.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task<bool> AddFormatList(AddFormatListDto newFormatList)
+        public async Task<int> AddFormatList(AddFormatListDto newFormatList)
         {
             try
             {
-                if (!_context.FormatLists.Any(c => c.Name == newFormatList.Name))
+                if (_context.FormatLists.Any(c => c.Name == newFormatList.Name))
                 {
                     throw new Exception();
                 }
                 _context.FormatLists.Add(_mapper.Map<FormatList>(newFormatList));
                 await _context.SaveChangesAsync();
-                return true;
+                var addedFormatList = await _context.FormatLists.FirstOrDefaultAsync(c => c.Name == newFormatList.Name);
+                return addedFormatList.Id;
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<List<GetFormatListDto>> GetAllFormatLists()

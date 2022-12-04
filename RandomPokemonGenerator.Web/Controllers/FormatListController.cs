@@ -15,7 +15,7 @@ namespace RandomPokemonGenerator.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddFormatList(AddFormatListDto newFormatList)
+        public async Task<ActionResult<int>> AddFormatList(AddFormatListDto newFormatList)
         {
             return Ok(await _formatListService.AddFormatList(newFormatList));
         }

@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { RouterLinkI } from './interfaces';
 
 @Component({
@@ -9,18 +6,13 @@ import { RouterLinkI } from './interfaces';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'RandomPokemonGenerator';
+  
   public routeLinks: RouterLinkI[] = [
     { label: "Format Lists", link: "format-lists" },
     { label: "Pokemon Sets", link: "pokemon-sets" },
     { label: "Randomizer", link: "randomizer-form" },
   ];
-  
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) { }
 
-  ngOnInit() { }
 }

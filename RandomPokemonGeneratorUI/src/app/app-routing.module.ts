@@ -10,10 +10,10 @@ import { RandomizerOutputComponent } from './components/randomizer/randomizer-ou
 const routes: Routes = [
   {path: '', redirectTo: 'format-lists', pathMatch: 'full'},
   {path: 'format-lists', component: FormatListsComponent},
-  {path: 'format-list/edit/0', component: FormatListsComponent},
+  {path: 'format-list/edit/0', redirectTo: 'format-lists', pathMatch: 'full'},
   {path: 'format-list/edit/:id', component: FormatListComponent},
   {path: 'pokemon-sets', component: PokemonSetsComponent},
-  {path: 'pokemon-set/edit/0', component: PokemonSetsComponent},
+  {path: 'pokemon-set/edit/0', redirectTo: 'pokemon-sets', pathMatch: 'full'},
   {path: 'pokemon-set/edit/:id', component: PokemonSetComponent},
   {path: 'randomizer-form', component: RandomizerFormComponent},
   {path: 'randomizer-output', component: RandomizerOutputComponent},

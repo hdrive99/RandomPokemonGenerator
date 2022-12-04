@@ -15,21 +15,22 @@ namespace RandomPokemonGenerator.Web.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task<bool> AddPokemonSet(AddPokemonSetDto newPokemonSet)
+        public async Task<int> AddPokemonSet(AddPokemonSetDto newPokemonSet)
         {
             try
             {
-                if (!_context.PokemonSets.Any(c => c.SetName == newPokemonSet.SetName))
+                if (_context.PokemonSets.Any(c => c.SetName == newPokemonSet.SetName))
                 {
                     throw new Exception();
                 }
                 _context.PokemonSets.Add(_mapper.Map<PokemonSet>(newPokemonSet));
                 await _context.SaveChangesAsync();
-                return true;
+                var addedPokemonSet = await _context.PokemonSets.FirstOrDefaultAsync(c => c.SetName == newPokemonSet.SetName);
+                return addedPokemonSet.Id;
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<List<GetPokemonSetDto>> GetAllPokemonSets()

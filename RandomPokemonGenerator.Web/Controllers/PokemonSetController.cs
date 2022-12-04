@@ -15,7 +15,7 @@ namespace RandomPokemonGenerator.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddPokemonSet(AddPokemonSetDto newPokemonSet)
+        public async Task<ActionResult<int>> AddPokemonSet(AddPokemonSetDto newPokemonSet)
         {
             return Ok(await _pokemonSetService.AddPokemonSet(newPokemonSet));
         }

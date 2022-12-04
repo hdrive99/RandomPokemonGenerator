@@ -24,3 +24,55 @@
         border-bottom: solid 2px #ddd;
     }
 }
+
+table {
+    width: 100%;
+}
+
+tr td, tr {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+  
+tr:hover td, tr:hover {
+    border-color: black;
+    background-color: #eee;
+}
+
+tr:active td {
+    background-color: #ddd;
+}
+
+.mat-column-delete {
+    width: 15%;
+}
+
+.delete-confirm-cancel-button {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.6rem;
+    gap: 0.8rem;
+}
+
+.mat-button:hover {
+    background-color: #9364e7;
+}
+
+.mat-button:disabled {
+    background-color: rgba(0,0,0,.12);
+}
+
+.warning-button:hover {
+    background-color: #fc7970;
+}
+
+mat-form-field {
+    height: 1.6rem;
+    width: 16rem;
+}

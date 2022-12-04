@@ -21,6 +21,7 @@ export class PokemonSet {
         public SpaIndividualValue: number,
         public SpdIndividualValue: number,
         public SpeIndividualValue: number,
+        public deleteConfirm: boolean = false,
         public name?: string,
         public item?: string,
         public gender?: string,
