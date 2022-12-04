@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RandomPokemonGenerator.Web.Data;
+using RandomPokemonGenerator.Web.Dtos.FormatList;
 using RandomPokemonGenerator.Web.Models;
 
 namespace RandomPokemonGenerator.Web.Services
@@ -7,15 +9,21 @@ namespace RandomPokemonGenerator.Web.Services
     public class FormatListService : IFormatListService
     {
         private readonly DataContext _context;
-        public FormatListService(DataContext context)
+        private readonly IMapper _mapper;
+        public FormatListService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<bool> AddFormatList(FormatList newFormatList)
+        public async Task<bool> AddFormatList(AddFormatListDto newFormatList)
         {
             try
             {
-                _context.FormatLists.Add(newFormatList);
+                if (!_context.FormatLists.Any(c => c.Name == newFormatList.Name))
+                {
+                    throw new Exception();
+                }
+                _context.FormatLists.Add(_mapper.Map<FormatList>(newFormatList));
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -24,21 +32,20 @@ namespace RandomPokemonGenerator.Web.Services
                 return false;
             }
         }
-        public async Task<List<FormatList>> GetAllFormatLists()
+        public async Task<List<GetFormatListDto>> GetAllFormatLists()
         {
-            return await _context.FormatLists.ToListAsync();
+            return await _context.FormatLists.Select(c => _mapper.Map<GetFormatListDto>(c)).ToListAsync();
         }
-        public async Task<FormatList> GetFormatListById(int id)
+        public async Task<GetFormatListDto> GetFormatListById(int id)
         {
-            return await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == id);
+            return _mapper.Map<GetFormatListDto>(await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == id));
         }
-        public async Task<bool> UpdateFormatList(FormatList updatedFormatList)
+        public async Task<bool> UpdateFormatList(UpdateFormatListDto updatedFormatList)
         {
             try
             {
                 FormatList formatList = await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == updatedFormatList.Id);
                 formatList.Name = updatedFormatList.Name;
-                formatList.PokemonSets = updatedFormatList.PokemonSets;
                 await _context.SaveChangesAsync();
                 return true;
             }

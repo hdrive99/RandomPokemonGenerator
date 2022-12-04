@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RandomPokemonGenerator.Web.Models;
+using RandomPokemonGenerator.Web.Dtos.PokemonSet;
 using RandomPokemonGenerator.Web.Services;
 
 namespace RandomPokemonGenerator.Web.Controllers
@@ -15,22 +15,22 @@ namespace RandomPokemonGenerator.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddPokemonSet(PokemonSet newPokemonSet)
+        public async Task<ActionResult<bool>> AddPokemonSet(AddPokemonSetDto newPokemonSet)
         {
             return Ok(await _pokemonSetService.AddPokemonSet(newPokemonSet));
         }
         [HttpGet]
-        public async Task<ActionResult<List<PokemonSet>>> GetAllPokemonSets()
+        public async Task<ActionResult<List<GetPokemonSetDto>>> GetAllPokemonSets()
         {
             return Ok(await _pokemonSetService.GetAllPokemonSets());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<PokemonSet>> GetPokemonSetById(int id)
+        public async Task<ActionResult<GetPokemonSetDto>> GetPokemonSetById(int id)
         {
             return Ok(await _pokemonSetService.GetPokemonSetById(id));
         }
         [HttpPut]
-        public async Task<ActionResult<bool>> UpdatePokemonSet(PokemonSet updatedPokemonSet)
+        public async Task<ActionResult<bool>> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet)
         {
             return Ok(await _pokemonSetService.UpdatePokemonSet(updatedPokemonSet));
         }

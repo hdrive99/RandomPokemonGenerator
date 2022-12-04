@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RandomPokemonGenerator.Web.Models;
+using RandomPokemonGenerator.Web.Dtos.FormatList;
 using RandomPokemonGenerator.Web.Services;
 
 namespace RandomPokemonGenerator.Web.Controllers
@@ -15,22 +15,22 @@ namespace RandomPokemonGenerator.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddFormatList(FormatList newFormatList)
+        public async Task<ActionResult<bool>> AddFormatList(AddFormatListDto newFormatList)
         {
             return Ok(await _formatListService.AddFormatList(newFormatList));
         }
         [HttpGet]
-        public async Task<ActionResult<List<FormatList>>> GetAllFormatLists()
+        public async Task<ActionResult<List<GetFormatListDto>>> GetAllFormatLists()
         {
             return Ok(await _formatListService.GetAllFormatLists());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<bool>> GetFormatListById(int id)
+        public async Task<ActionResult<GetFormatListDto>> GetFormatListById(int id)
         {
             return Ok(await _formatListService.GetFormatListById(id));
         }
         [HttpPut]
-        public async Task<ActionResult<bool>> UpdateFormatList(FormatList updatedFormatList)
+        public async Task<ActionResult<bool>> UpdateFormatList(UpdateFormatListDto updatedFormatList)
         {
             return Ok(await _formatListService.UpdateFormatList(updatedFormatList));
         }

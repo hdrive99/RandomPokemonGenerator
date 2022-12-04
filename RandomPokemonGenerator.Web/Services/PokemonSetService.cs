@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RandomPokemonGenerator.Web.Data;
+using RandomPokemonGenerator.Web.Dtos.PokemonSet;
 using RandomPokemonGenerator.Web.Models;
 
 namespace RandomPokemonGenerator.Web.Services
@@ -7,15 +9,21 @@ namespace RandomPokemonGenerator.Web.Services
     public class PokemonSetService : IPokemonSetService
     {
         private readonly DataContext _context;
-        public PokemonSetService(DataContext context)
+        private readonly IMapper _mapper;
+        public PokemonSetService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<bool> AddPokemonSet(PokemonSet newPokemonSet)
+        public async Task<bool> AddPokemonSet(AddPokemonSetDto newPokemonSet)
         {
             try
             {
-                _context.PokemonSets.Add(newPokemonSet);
+                if (!_context.PokemonSets.Any(c => c.SetName == newPokemonSet.SetName))
+                {
+                    throw new Exception();
+                }
+                _context.PokemonSets.Add(_mapper.Map<PokemonSet>(newPokemonSet));
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -24,15 +32,15 @@ namespace RandomPokemonGenerator.Web.Services
                 return false;
             }
         }
-        public async Task<List<PokemonSet>> GetAllPokemonSets()
+        public async Task<List<GetPokemonSetDto>> GetAllPokemonSets()
         {
-            return await _context.PokemonSets.ToListAsync();
+            return await _context.PokemonSets.Select(c => _mapper.Map<GetPokemonSetDto>(c)).ToListAsync();
         }
-        public async Task<PokemonSet> GetPokemonSetById(int id)
+        public async Task<GetPokemonSetDto> GetPokemonSetById(int id)
         {
-            return await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == id);
+            return _mapper.Map<GetPokemonSetDto>(await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == id));
         }
-        public async Task<bool> UpdatePokemonSet(PokemonSet updatedPokemonSet)
+        public async Task<bool> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet)
         {
             try
             {
@@ -62,7 +70,6 @@ namespace RandomPokemonGenerator.Web.Services
                 pokemonSet.SpeIndividualValue = updatedPokemonSet.SpeIndividualValue;
                 pokemonSet.Level = updatedPokemonSet.Level;
                 pokemonSet.TerastallizeType = updatedPokemonSet.TerastallizeType;
-                pokemonSet.FormatLists = updatedPokemonSet.FormatLists;
                 await _context.SaveChangesAsync();
                 return true;
             }
