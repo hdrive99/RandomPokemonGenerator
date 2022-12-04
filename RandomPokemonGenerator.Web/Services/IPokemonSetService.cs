@@ -9,5 +9,7 @@ namespace RandomPokemonGenerator.Web.Services
         Task<GetPokemonSetDto> GetPokemonSetById(int id);
         Task<bool> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet);
         Task<bool> DeletePokemonSet(int id);
+        Task<bool> AddPokemonSetFormatList(AddPokemonSetFormatListDto newPokemonSetFormatList);
+        Task<bool> DeletePokemonSetFormatList(AddPokemonSetFormatListDto deletePokemonSetFormatList);
     }
 }

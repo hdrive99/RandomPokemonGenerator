@@ -9,5 +9,7 @@ namespace RandomPokemonGenerator.Web.Services
         Task<GetFormatListDto> GetFormatListById(int id);
         Task<bool> UpdateFormatList(UpdateFormatListDto updatedFormatList);
         Task<bool> DeleteFormatList(int id);
+        Task<bool> AddFormatListPokemonSet(AddFormatListPokemonSetDto newFormatListPokemonSet);
+        Task<bool> DeleteFormatListPokemonSet(AddFormatListPokemonSetDto deleteFormatListPokemonSet);
     }
 }

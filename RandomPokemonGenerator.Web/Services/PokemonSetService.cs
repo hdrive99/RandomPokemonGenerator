@@ -34,11 +34,11 @@ namespace RandomPokemonGenerator.Web.Services
         }
         public async Task<List<GetPokemonSetDto>> GetAllPokemonSets()
         {
-            return await _context.PokemonSets.Select(c => _mapper.Map<GetPokemonSetDto>(c)).ToListAsync();
+            return await _context.PokemonSets.Include(c => c.FormatLists).Select(c => _mapper.Map<GetPokemonSetDto>(c)).ToListAsync();
         }
         public async Task<GetPokemonSetDto> GetPokemonSetById(int id)
         {
-            return _mapper.Map<GetPokemonSetDto>(await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == id));
+            return _mapper.Map<GetPokemonSetDto>(await _context.PokemonSets.Include(c => c.FormatLists).FirstOrDefaultAsync(c => c.Id == id));
         }
         public async Task<bool> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet)
         {
@@ -84,6 +84,42 @@ namespace RandomPokemonGenerator.Web.Services
             {
                 PokemonSet pokemonSet = await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == id);
                 _context.PokemonSets.Remove(pokemonSet);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddPokemonSetFormatList(AddPokemonSetFormatListDto newPokemonSetFormatList)
+        {
+            try
+            {
+                var pokemonSet = await _context.PokemonSets.Include(c => c.FormatLists).FirstOrDefaultAsync(c => c.Id == newPokemonSetFormatList.PokemonSetId);
+                var formatList = await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == newPokemonSetFormatList.FormatListId);
+                pokemonSet.FormatLists.Add(formatList);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeletePokemonSetFormatList(AddPokemonSetFormatListDto deletePokemonSetFormatList)
+        {
+            try
+            {
+                var pokemonSet = await _context.PokemonSets.Include(c => c.FormatLists).FirstOrDefaultAsync(c => c.Id == deletePokemonSetFormatList.PokemonSetId);
+                var formatList = await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == deletePokemonSetFormatList.FormatListId);
+                if (!pokemonSet.FormatLists.Contains(formatList))
+                {
+                    throw new Exception();
+                }
+                pokemonSet.FormatLists.Remove(formatList);
                 await _context.SaveChangesAsync();
                 return true;
             }

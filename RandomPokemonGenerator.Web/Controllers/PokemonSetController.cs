@@ -39,5 +39,15 @@ namespace RandomPokemonGenerator.Web.Controllers
         {
             return Ok(await _pokemonSetService.DeletePokemonSet(id));
         }
+        [HttpPost("FormatList")]
+        public async Task<ActionResult<bool>> AddPokemonSetFormatList(AddPokemonSetFormatListDto newPokemonSetFormatList)
+        {
+            return Ok(await _pokemonSetService.AddPokemonSetFormatList(newPokemonSetFormatList));
+        }
+        [HttpDelete("FormatList")]
+        public async Task<ActionResult<bool>> DeletePokemonSetFormatList(AddPokemonSetFormatListDto deletePokemonSetFormatList)
+        {
+            return Ok(await _pokemonSetService.DeletePokemonSetFormatList(deletePokemonSetFormatList));
+        }
     }
 }
