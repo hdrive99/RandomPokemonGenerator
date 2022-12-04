@@ -1,1 +1,9 @@
-Application Works!
+<mat-toolbar class="nav">
+    <a class="links" *ngFor="let link of routeLinks" id="{{ link.link }}" routerLink="{{ link.link }}"
+        routerLinkActive="active-link">
+        {{ link.label }}
+    </a>
+</mat-toolbar>
+<div class="content">
+    <router-outlet></router-outlet>
+</div>

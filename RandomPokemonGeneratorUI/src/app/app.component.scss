@@ -1,0 +1,26 @@
+.content {
+    width: 95%;
+    margin: 0 auto;
+    padding: 2.4rem 0;
+}
+
+.nav {
+    background-color: #1976d2;
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+
+    .links, .links:visited, .links:link {
+        margin: 10px 15px;
+        color: #ddd;
+        text-decoration: none;
+    }
+
+    .links:hover, .links:active {
+        color: white;
+    }
+  
+    .active-link {
+        border-bottom: solid 2px #ddd;
+    }
+}
