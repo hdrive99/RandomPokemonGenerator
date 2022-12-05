@@ -18,7 +18,7 @@ export class FormatListsComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   displayedColumns = ['id', 'name', 'pokemonSetsCount'];
   tableColumnNames = ['ID', 'Name', '# of Pokemon Sets'];
-  columnsToDisplayWithExpand = ['id', 'name', 'pokemonSetsCount', 'delete'];
+  columnsToDisplayWithDelete = ['id', 'name', 'pokemonSetsCount', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   formatListForm = new FormGroup({

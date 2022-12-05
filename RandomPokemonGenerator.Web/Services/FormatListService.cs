@@ -45,6 +45,10 @@ namespace RandomPokemonGenerator.Web.Services
         {
             try
             {
+                if (_context.FormatLists.Any(c => c.Name == updatedFormatList.Name && c.Id != updatedFormatList.Id))
+                {
+                    throw new Exception();
+                }
                 FormatList formatList = await _context.FormatLists.FirstOrDefaultAsync(c => c.Id == updatedFormatList.Id);
                 formatList.Name = updatedFormatList.Name;
                 await _context.SaveChangesAsync();

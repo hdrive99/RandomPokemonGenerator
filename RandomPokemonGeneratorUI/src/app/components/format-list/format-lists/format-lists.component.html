@@ -1,4 +1,5 @@
 <form class="toolbar" [formGroup]="formatListForm" (ngSubmit)="addFormatList()">
+    <h1 class="header-title">Format Lists</h1>
     <mat-form-field>
         <input matInput type="text" formControlName="formatListControl" [errorStateMatcher]="matcher"
             placeholder="Format Name">
@@ -35,7 +36,7 @@
             </span>
         </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithExpand;"
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithDelete"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithDelete;"
         [routerLink]="['/format-list/edit/', row.id]"></tr>
 </table>

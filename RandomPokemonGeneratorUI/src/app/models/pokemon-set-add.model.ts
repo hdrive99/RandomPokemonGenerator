@@ -1,6 +1,7 @@
 export class PokemonSetAdd {
     constructor(
         public setName: string,
+        public species: string,
         public ability: string,
         public moveOne: string,
         public moveTwo: string,

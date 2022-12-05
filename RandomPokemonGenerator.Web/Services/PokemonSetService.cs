@@ -45,6 +45,10 @@ namespace RandomPokemonGenerator.Web.Services
         {
             try
             {
+                if (_context.PokemonSets.Any(c => c.SetName == updatedPokemonSet.SetName && c.Id != updatedPokemonSet.Id))
+                {
+                    throw new Exception();
+                }
                 PokemonSet pokemonSet = await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == updatedPokemonSet.Id);
                 pokemonSet.SetName = updatedPokemonSet.SetName;
                 pokemonSet.Name = updatedPokemonSet.Name;

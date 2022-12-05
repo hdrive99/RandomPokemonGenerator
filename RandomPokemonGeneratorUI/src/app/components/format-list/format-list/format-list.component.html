@@ -1,1 +1,61 @@
-<p>format-list works!</p>
+<form class="toolbar" [formGroup]="formatListPokemonSetAddForm" (ngSubmit)="addFormatListPokemonSet()">
+    <h1 class="header-title"><strong>Viewing Format List: </strong>[ID: {{formatListId}}] {{formatListName}}</h1>
+    <mat-form-field>
+        <mat-select formControlName="formatListPokemonSetAddControl" [errorStateMatcher]="matcher"
+            placeholder="Choose Pokemon Set">
+            <mat-option *ngFor="let pokemonSet of allPokemonSetsFiltered" value="{{pokemonSet.id}}">
+                {{pokemonSet.setName}}</mat-option>
+            <mat-option *ngIf="allPokemonSetsFiltered?.length == 0" value="" disabled>Your list has all pokemon
+                sets!</mat-option>
+        </mat-select>
+        <mat-error
+            *ngIf="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required') && allPokemonSetsFiltered?.length != 0">
+            Pokemon Set is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="mat-button"
+        [disabled]="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required')">
+        Add to Format
+    </button>
+</form>
+<table mat-table matSort [dataSource]="dataSource">
+    <ng-container *ngFor="let columns of displayedColumns; let i = index" matColumnDef="{{columns}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{tableColumnNames[i]}}</th>
+        <td mat-cell *matCellDef="let row">{{row[columns]}}</td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">Delete</th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-raised-button color="warn" class="warning-button" *ngIf="!element.deleteConfirm"
+                (click)="confirmDelete(element); $event.stopPropagation()">
+                Delete
+            </button>
+            <span *ngIf="!!element.deleteConfirm" class="delete-confirm-cancel-button">
+                <button mat-raised-button color="accent" class="warning-button"
+                    (click)="deleteFormatListPokemonSet(element); $event.stopPropagation()">
+                    Yes
+                </button>
+                <button mat-raised-button color="basic" class="warning-button"
+                    (click)="cancelDeleteConfirm(element); $event.stopPropagation()">
+                    No
+                </button>
+            </span>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithDelete"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithDelete;"
+        [routerLink]="['/pokemon-set/edit/', row.id]"></tr>
+</table>
+<form class="toolbar table-footer" [formGroup]="updateFormatListForm" (ngSubmit)="updateFormatList()">
+    <mat-form-field>
+        <input matInput type="text" formControlName="updateFormatListControl" [errorStateMatcher]="matcher"
+            placeholder="Edit Format Name">
+        <mat-error *ngIf="updateFormatListForm.get('updateFormatListControl').hasError('required')">
+            Format Name is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="mat-button"
+        [disabled]="updateFormatListForm.get('updateFormatListControl').hasError('required')">
+        Rename Format
+    </button>
+</form>
