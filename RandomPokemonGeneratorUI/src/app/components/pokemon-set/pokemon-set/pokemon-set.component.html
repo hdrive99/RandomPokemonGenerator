@@ -1,1 +1,150 @@
-<p>pokemon-set works!</p>
+<form [formGroup]="updatePokemonSetForm" (ngSubmit)="updatePokemonSet()">
+    <div class="toolbar">
+        <div class="header-title">
+            <h1>Viewing Pokemon Set: </h1>
+            <h2>[ID: {{pokemonSetId}}] {{pokemonSetName}}</h2>
+        </div>
+        <mat-form-field>
+            <input matInput type="text" formControlName="setNameControl" [errorStateMatcher]="matcher"
+                placeholder="Edit Set Name">
+            <mat-error *ngIf="updatePokemonSetForm.get('setNameControl').hasError('required')">
+                Set Name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="mat-button"
+            [disabled]="updatePokemonSetForm.get('setNameControl').hasError('required')">
+            Save Pokemon Set
+        </button>
+    </div>
+    <div class="edit-pokemon">
+        <div class="pokemon-set">
+            <div class="pokemon-details">
+                <div class="pokemon">
+                    <div>Nickname: </div>
+                    <input type="text">
+                    <img src="https://play.pokemonshowdown.com/sprites/dex/{{pokemonSetName}}.png"
+                        onerror="this.src = `https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/MissingNo.png/256px-MissingNo.png`;"
+                        class="image" />
+                </div>
+                <div class="details-container">
+                    <strong>Details</strong>
+                    <div class="details-content">
+                        <div>Level: </div><input type="text">
+                        <div></div>
+                        <div>Gender: </div><input type="text">
+                        <div></div>
+                        <div>Shiny: </div><input type="text">
+                        <div></div>
+                        <div>Tera Type: </div><input type="text">
+                        <div></div>
+                    </div>
+                </div>
+                <div class="moves">
+                    <div>Moves: </div>
+                    <input type="text" class="move-input">
+                    <input type="text" class="move-input">
+                    <input type="text" class="move-input">
+                </div>
+                <div>
+                    <div>Pokemon: </div><input type="text">
+                </div>
+                <div>
+                    <div>Item: </div><input type="text">
+                </div>
+                <div>
+                    <div>Ability: </div><input type="text">
+                </div>
+                <div class="last-move">
+                    <div class="empty"></div><input type="text" class="move-input">
+                </div>
+            </div>
+            <div class="pokemon-stats">
+                <div></div>
+                <div>EVs</div>
+                <div></div>
+                <div>IVs</div>
+                <div>HP</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>Atk</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>Def</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>SpA</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>SpD</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>Spe</div>
+                <div><input></div>
+                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input></div>
+                <div>Remaining:</div>
+                <div>508</div>
+                <div>Nature: <input></div>
+            </div>
+        </div>
+        <div class="pokemon-export">
+            <textarea type="textarea" rows="5" class="pokemon-export-textbox"></textarea>
+        </div>
+    </div>
+</form>
+<form class="toolbar table-footer" [formGroup]="pokemonSetFormatListAddForm" (ngSubmit)="addPokemonSetFormatList()">
+    <div class="header-title">
+        <h1>Format Lists containing</h1>
+        <h2>[ID: {{pokemonSetId}}] {{pokemonSetName}}:</h2>
+    </div>
+    <mat-form-field>
+        <mat-select formControlName="pokemonSetFormatListAddControl" [errorStateMatcher]="matcher"
+            placeholder="Choose Format">
+            <mat-option *ngFor="let formatList of allFormatListsFiltered" value="{{formatList.id}}">
+                {{formatList.name}}</mat-option>
+            <mat-option *ngIf="allFormatListsFiltered?.length == 0" value="" disabled>Your list is in all
+                formats!</mat-option>
+        </mat-select>
+        <mat-error
+            *ngIf="pokemonSetFormatListAddForm.get('pokemonSetFormatListAddControl').hasError('required') && allFormatListsFiltered?.length != 0">
+            Format is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="mat-button"
+        [disabled]="pokemonSetFormatListAddForm.get('pokemonSetFormatListAddControl').hasError('required')">
+        Add to Pokemon Set
+    </button>
+</form>
+<table class="table-footer" mat-table matSort [dataSource]="dataSource">
+    <ng-container *ngFor="let columns of displayedColumns; let i = index" matColumnDef="{{columns}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{tableColumnNames[i]}}</th>
+        <td mat-cell *matCellDef="let row">{{row[columns]}}</td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">Delete</th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-raised-button color="warn" class="warning-button" *ngIf="!element.deleteConfirm"
+                (click)="confirmDelete(element); $event.stopPropagation()">
+                Delete
+            </button>
+            <span *ngIf="!!element.deleteConfirm" class="delete-confirm-cancel-button">
+                <button mat-raised-button color="accent" class="warning-button"
+                    (click)="deleteFormatListPokemonSet(element); $event.stopPropagation()">
+                    Yes
+                </button>
+                <button mat-raised-button color="basic" class="warning-button"
+                    (click)="cancelDeleteConfirm(element); $event.stopPropagation()">
+                    No
+                </button>
+            </span>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithDelete"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithDelete;"
+        [routerLink]="['/format-list/edit/', row.id]"></tr>
+</table>
