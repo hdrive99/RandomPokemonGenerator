@@ -19,6 +19,7 @@ export class PokemonSetUpdate {
         public SpaIndividualValue: number,
         public SpdIndividualValue: number,
         public SpeIndividualValue: number,
+        public nature: string,
         public name?: string,
         public item?: string,
         public gender?: string,

@@ -1,21 +1,18 @@
-<form class="toolbar" [formGroup]="formatListPokemonSetAddForm" (ngSubmit)="addFormatListPokemonSet()">
-    <h1 class="header-title"><strong>Viewing Format List: </strong>[ID: {{formatListId}}] {{formatListName}}</h1>
+<form class="toolbar" [formGroup]="updateFormatListForm" (ngSubmit)="updateFormatList()">
+    <div class="header-title">
+        <h1>Viewing Format List: </h1>
+        <h2>[ID: {{formatListId}}] {{formatListName}}</h2>
+    </div>
     <mat-form-field>
-        <mat-select formControlName="formatListPokemonSetAddControl" [errorStateMatcher]="matcher"
-            placeholder="Choose Pokemon Set">
-            <mat-option *ngFor="let pokemonSet of allPokemonSetsFiltered" value="{{pokemonSet.id}}">
-                {{pokemonSet.setName}}</mat-option>
-            <mat-option *ngIf="allPokemonSetsFiltered?.length == 0" value="" disabled>Your list has all pokemon
-                sets!</mat-option>
-        </mat-select>
-        <mat-error
-            *ngIf="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required') && allPokemonSetsFiltered?.length != 0">
-            Pokemon Set is <strong>required</strong>
+        <input matInput type="text" formControlName="updateFormatListControl" [errorStateMatcher]="matcher"
+            placeholder="Edit Format Name">
+        <mat-error *ngIf="updateFormatListForm.get('updateFormatListControl').hasError('required')">
+            Format Name is <strong>required</strong>
         </mat-error>
     </mat-form-field>
     <button mat-raised-button color="primary" class="mat-button"
-        [disabled]="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required')">
-        Add to Format
+        [disabled]="updateFormatListForm.get('updateFormatListControl').hasError('required')">
+        Rename Format
     </button>
 </form>
 <table mat-table matSort [dataSource]="dataSource">
@@ -46,16 +43,22 @@
     <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithDelete;"
         [routerLink]="['/pokemon-set/edit/', row.id]"></tr>
 </table>
-<form class="toolbar table-footer" [formGroup]="updateFormatListForm" (ngSubmit)="updateFormatList()">
+<form class="toolbar table-footer" [formGroup]="formatListPokemonSetAddForm" (ngSubmit)="addFormatListPokemonSet()">
     <mat-form-field>
-        <input matInput type="text" formControlName="updateFormatListControl" [errorStateMatcher]="matcher"
-            placeholder="Edit Format Name">
-        <mat-error *ngIf="updateFormatListForm.get('updateFormatListControl').hasError('required')">
-            Format Name is <strong>required</strong>
+        <mat-select formControlName="formatListPokemonSetAddControl" [errorStateMatcher]="matcher"
+            placeholder="Choose Pokemon Set">
+            <mat-option *ngFor="let pokemonSet of allPokemonSetsFiltered" value="{{pokemonSet.id}}">
+                {{pokemonSet.setName}}</mat-option>
+            <mat-option *ngIf="allPokemonSetsFiltered?.length == 0" value="" disabled>Your list has all pokemon
+                sets!</mat-option>
+        </mat-select>
+        <mat-error
+            *ngIf="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required') && allPokemonSetsFiltered?.length != 0">
+            Pokemon Set is <strong>required</strong>
         </mat-error>
     </mat-form-field>
     <button mat-raised-button color="primary" class="mat-button"
-        [disabled]="updateFormatListForm.get('updateFormatListControl').hasError('required')">
-        Rename Format
+        [disabled]="formatListPokemonSetAddForm.get('formatListPokemonSetAddControl').hasError('required')">
+        Add to Format
     </button>
 </form>
