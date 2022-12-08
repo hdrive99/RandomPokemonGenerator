@@ -7,9 +7,10 @@ server.use(jsonServer.bodyParser);
 
 const {Teams} = require('pokemon-showdown');
 
-server.get('/api/teams', (req, res, next) => {
+// Returns JSON object containing imported sets that are mapped to PokemonSet properties
+server.post('/api/importSets', (req, res, next) => {
   res.status(200).send(
-    Teams.generate('gen8ou')
+    Teams.import(req.body['model'])
   );
 });
 

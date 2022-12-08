@@ -190,9 +190,20 @@
                 </div>
             </div>
         </div>
-        <div class="pokemon-export">
-            <textarea type="textarea" rows="5" class="pokemon-export-textbox"></textarea>
-        </div>
+        <form class="pokemon-export-container" [formGroup]="importPokemonSetForm" id="importForm">
+            <div class="pokemon-export-content">
+                <div class="pokemon-export-textbox-container"><textarea type="textarea" rows="5"
+                        class="pokemon-export-textbox" formControlName="importPokemonSetControl"
+                        form="importForm"></textarea></div>
+                <div class="pokemon-export-toolbar">
+                    <button mat-raised-button color="accent" class="mat-button"
+                        [disabled]="importPokemonSetForm.get('importPokemonSetControl').hasError('required')"
+                        type="button" (click)="importPokemonSet()">
+                        Import Pokemon Set
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </form>
 <form class="toolbar table-footer" [formGroup]="pokemonSetFormatListAddForm" (ngSubmit)="addPokemonSetFormatList()">

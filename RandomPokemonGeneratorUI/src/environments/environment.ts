@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   BASE_API_PATH: 'http://localhost:5003/api',
-  SHOWDOWN_LOCAL_SERVER_PATH: 'http://localhost:3000'
+  SHOWDOWN_LOCAL_SERVER_PATH: 'http://localhost:3000/api'
 };
 
 /*

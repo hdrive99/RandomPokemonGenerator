@@ -43,4 +43,9 @@ export class PokemonSetService {
   deleteFormatList(model: PokemonSetFormatListAdd): Observable<boolean> {
     return this.http.request<boolean>('delete', `${environment.BASE_API_PATH}/PokemonSet/FormatList`, {body: model});
   }
+
+  // Returns array of JSON objects containing imported sets that are mapped to PokemonSet properties
+  packPokemonSet(importSet): Observable<any[]> {
+    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/importSets`, {model: importSet});
+  }
 }

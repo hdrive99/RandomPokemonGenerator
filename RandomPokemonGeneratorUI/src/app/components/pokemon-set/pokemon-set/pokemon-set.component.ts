@@ -54,6 +54,9 @@ export class PokemonSetComponent implements OnInit {
     levelControl: new FormControl('', []),
     terastallizeTypeControl: new FormControl('', [])
   });
+  importPokemonSetForm = new FormGroup({
+    importPokemonSetControl: new FormControl('', [ Validators.required ])
+  });
   matcher = new MyErrorStateMatcher();
 
   pokemonSetId = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -62,6 +65,7 @@ export class PokemonSetComponent implements OnInit {
   pokemonSetFormatListsIds = [];
   allFormatListsFiltered: FormatList[];
   evTotal;
+  allTeraTypes = ['Tera Type: Bug', 'Tera Type: Dark', 'Tera Type: Dragon', 'Tera Type: Electric', 'Tera Type: Fairy', 'Tera Type: Fighting', 'Tera Type: Fire', 'Tera Type: Flying', 'Tera Type: Ghost', 'Tera Type: Grass', 'Tera Type: Ground', 'Tera Type: Ice', 'Tera Type: Normal', 'Tera Type: Poison', 'Tera Type: Psychic', 'Tera Type: Rock', 'Tera Type: Steel', 'Tera Type: Water'];
   
   constructor(
     private route: ActivatedRoute,
@@ -233,5 +237,48 @@ export class PokemonSetComponent implements OnInit {
       this.updatePokemonSetForm.get('SpaEffortValueControl').value +
       this.updatePokemonSetForm.get('SpdEffortValueControl').value +
       this.updatePokemonSetForm.get('SpeEffortValueControl').value);
+  }
+
+  importPokemonSet() {
+    let input: string = this.importPokemonSetForm.get('importPokemonSetControl').value;
+    let teraType = '';
+    this.allTeraTypes.forEach(el => {
+      if (input.includes(el)) {
+        teraType = el.slice(11);
+      }
+    });
+    console.log(teraType);
+    this.pokemonSetService.packPokemonSet(input).subscribe((packedJsonSets) => {
+      let model = new PokemonSetUpdate(
+        this.pokemonSetId,
+        this.pokemonSetName,
+        packedJsonSets[0].species,
+        packedJsonSets[0].ability,
+        packedJsonSets[0].moves[0],
+        packedJsonSets[0].moves[1],
+        packedJsonSets[0].moves[2],
+        packedJsonSets[0].moves[3],
+        packedJsonSets[0].evs.hp,
+        packedJsonSets[0].evs.atk,
+        packedJsonSets[0].evs.def,
+        packedJsonSets[0].evs.spa,
+        packedJsonSets[0].evs.spd,
+        packedJsonSets[0].evs.spe,
+        packedJsonSets[0].ivs.hp,
+        packedJsonSets[0].ivs.atk,
+        packedJsonSets[0].ivs.def,
+        packedJsonSets[0].ivs.spa,
+        packedJsonSets[0].ivs.spd,
+        packedJsonSets[0].ivs.spe,
+        packedJsonSets[0].nature,
+        packedJsonSets[0].name,
+        packedJsonSets[0].item,
+        packedJsonSets[0].gender,
+        packedJsonSets[0].level,
+        teraType
+      );
+      this.setAllPokemonSetFormValues(model);
+      this.pokemonSpecies = model.species.toLowerCase();
+    });
   }
 }
