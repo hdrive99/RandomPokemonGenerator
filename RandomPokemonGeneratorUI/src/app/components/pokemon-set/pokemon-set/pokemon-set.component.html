@@ -112,41 +112,47 @@
                 <strong>HP</strong>
                 <div><input matInput type="number" formControlName="HpEffortValueControl" [errorStateMatcher]="matcher">
                 </div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="HpEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="HpIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>Atk</strong>
                 <div><input matInput type="number" formControlName="AtkEffortValueControl"
                         [errorStateMatcher]="matcher"></div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="AtkEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="AtkIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>Def</strong>
                 <div><input matInput type="number" formControlName="DefEffortValueControl"
                         [errorStateMatcher]="matcher"></div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="DefEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="DefIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>SpA</strong>
                 <div><input matInput type="number" formControlName="SpaEffortValueControl"
                         [errorStateMatcher]="matcher"></div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="SpaEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="SpaIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>SpD</strong>
                 <div><input matInput type="number" formControlName="SpdEffortValueControl"
                         [errorStateMatcher]="matcher"></div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="SpdEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="SpdIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>Spe</strong>
                 <div><input matInput type="number" formControlName="SpeEffortValueControl"
                         [errorStateMatcher]="matcher"></div>
-                <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
+                <div><input type="range" formControlName="SpeEffortValueControl" class="ev-slider" min="0" max="252"
+                        step="4"></div>
                 <div><input matInput type="number" formControlName="SpeIndividualValueControl"
                         [errorStateMatcher]="matcher"></div>
                 <strong>Remaining:</strong>
-                <div>508</div>
+                <div>{{evTotal}}</div>
                 <div class="nature">
                     <div class="nature-content">
                         <strong>Nature:</strong>

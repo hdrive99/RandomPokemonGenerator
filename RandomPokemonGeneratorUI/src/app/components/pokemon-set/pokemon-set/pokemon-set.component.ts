@@ -61,6 +61,7 @@ export class PokemonSetComponent implements OnInit {
   pokemonSpecies;
   pokemonSetFormatListsIds = [];
   allFormatListsFiltered: FormatList[];
+  evTotal;
   
   constructor(
     private route: ActivatedRoute,
@@ -71,6 +72,12 @@ export class PokemonSetComponent implements OnInit {
   
   ngOnInit(): void {
     this.getPokemonSet();
+    this.updatePokemonSetForm.get('HpEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('HpEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.get('AtkEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('AtkEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.get('DefEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('DefEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.get('SpaEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpaEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.get('SpdEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpdEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.get('SpeEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpeEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
   }
 
   getPokemonSet() {
@@ -216,5 +223,15 @@ export class PokemonSetComponent implements OnInit {
     timer = setTimeout(() => {
       this.pokemonSpecies = newSpecies;
     }, 1000);
+  }
+
+  calculateRemainingEvs() {
+    this.evTotal = 508 - 
+      (this.updatePokemonSetForm.get('HpEffortValueControl').value +
+      this.updatePokemonSetForm.get('AtkEffortValueControl').value +
+      this.updatePokemonSetForm.get('DefEffortValueControl').value +
+      this.updatePokemonSetForm.get('SpaEffortValueControl').value +
+      this.updatePokemonSetForm.get('SpdEffortValueControl').value +
+      this.updatePokemonSetForm.get('SpeEffortValueControl').value);
   }
 }
