@@ -20,8 +20,8 @@ import { PokemonSetService } from 'src/app/services/pokemon-set.service';
 export class FormatListComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   displayedColumns = ['id', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'nature'];
-  tableColumnNames = ['ID', 'Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Nature', 'Delete'];
-  columnsToDisplayWithDelete = ['id', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'nature', 'delete'];
+  tableColumnNames = ['ID', 'Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Nature'];
+  columnsToDisplayWithDelete = ['sprite', 'id', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'nature', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   formatListPokemonSetAddForm = new FormGroup({
