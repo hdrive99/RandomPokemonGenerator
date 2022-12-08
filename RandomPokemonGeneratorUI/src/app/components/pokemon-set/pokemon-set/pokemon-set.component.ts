@@ -58,6 +58,7 @@ export class PokemonSetComponent implements OnInit {
 
   pokemonSetId = parseInt(this.route.snapshot.paramMap.get('id'));
   pokemonSetName;
+  pokemonSpecies;
   pokemonSetFormatListsIds = [];
   allFormatListsFiltered: FormatList[];
   
@@ -70,13 +71,13 @@ export class PokemonSetComponent implements OnInit {
   
   ngOnInit(): void {
     this.getPokemonSet();
-    // displayedColumns = ['id', 'setName', 'name', 'species', 'item', 'ability', 'moveOne', 'moveTwo', 'moveThree', 'moveFour', 'nature', 'HpEffortValue', 'AtkEffortValue', 'DefEffortValue', 'SpaEffortValue', 'SpdEffortValue', 'SpeEffortValue', 'gender', 'HpIndividualValue', 'AtkIndividualValue', 'DefIndividualValue', 'SpaIndividualValue', 'SpdIndividualValue', 'SpeIndividualValue', 'level', 'terastallizeType'];
   }
 
   getPokemonSet() {
     this.pokemonSetService.get(this.pokemonSetId).subscribe((data) => {
       this.setAllPokemonSetFormValues(data);
       this.pokemonSetName = data.setName;
+      this.pokemonSpecies = data.species.toLowerCase();
       if (data?.formatLists) {
         this.dataSource = new MatTableDataSource(data.formatLists);
         this.dataSource.sort = this.sort;
@@ -205,5 +206,15 @@ export class PokemonSetComponent implements OnInit {
     ).subscribe((data) => {
       this.allFormatListsFiltered = data;
     });
+  }
+
+  renderImageOnSpeciesInputChange(event) {
+    let timer;
+    const newSpecies = event.currentTarget.value.toLowerCase();
+    clearTimeout(timer);
+    
+    timer = setTimeout(() => {
+      this.pokemonSpecies = newSpecies;
+    }, 1000);
   }
 }
