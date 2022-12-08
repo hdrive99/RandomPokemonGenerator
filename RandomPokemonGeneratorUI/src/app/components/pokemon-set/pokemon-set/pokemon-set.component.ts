@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { FormatList } from 'src/app/models/format-list.model';
 import { PokemonSetFormatListAdd } from 'src/app/models/pokemon-set-format-list-add.model';
+import { PokemonSetUpdate } from 'src/app/models/pokemon-set-update.model';
 import { FormatListService } from 'src/app/services/format-list.service';
 import { MyErrorStateMatcher } from 'src/app/services/my-error-state-matcher.service';
 import { PokemonSetService } from 'src/app/services/pokemon-set.service';
@@ -32,24 +33,24 @@ export class PokemonSetComponent implements OnInit {
     speciesControl: new FormControl('', [ Validators.required ]),
     itemControl: new FormControl('', []),
     abilityControl: new FormControl('', [ Validators.required ]),
-    moveOneControl: new FormControl('', [ Validators.required ]),
-    moveTwoControl: new FormControl('', [ Validators.required ]),
-    moveThreeControl: new FormControl('', [ Validators.required ]),
-    moveFourControl: new FormControl('', [ Validators.required ]),
+    moveOneControl: new FormControl('', []),
+    moveTwoControl: new FormControl('', []),
+    moveThreeControl: new FormControl('', []),
+    moveFourControl: new FormControl('', []),
     natureControl: new FormControl('', [ Validators.required ]),
-    HpEffortValueControl: new FormControl('', [ Validators.required ]),
-    AtkEffortValueControl: new FormControl('', [ Validators.required ]),
-    DefEffortValueControl: new FormControl('', [ Validators.required ]),
-    SpaEffortValueControl: new FormControl('', [ Validators.required ]),
-    SpdEffortValueControl: new FormControl('', [ Validators.required ]),
-    SpeEffortValueControl: new FormControl('', [ Validators.required ]),
+    HpEffortValueControl: new FormControl('', []),
+    AtkEffortValueControl: new FormControl('', []),
+    DefEffortValueControl: new FormControl('', []),
+    SpaEffortValueControl: new FormControl('', []),
+    SpdEffortValueControl: new FormControl('', []),
+    SpeEffortValueControl: new FormControl('', []),
     genderControl: new FormControl('', []),
-    HpIndividualValueControl: new FormControl('', [ Validators.required ]),
-    AtkIndividualValueControl: new FormControl('', [ Validators.required ]),
-    DefIndividualValueControl: new FormControl('', [ Validators.required ]),
-    SpaIndividualValueControl: new FormControl('', [ Validators.required ]),
-    SpdIndividualValueControl: new FormControl('', [ Validators.required ]),
-    SpeIndividualValueControl: new FormControl('', [ Validators.required ]),
+    HpIndividualValueControl: new FormControl('', []),
+    AtkIndividualValueControl: new FormControl('', []),
+    DefIndividualValueControl: new FormControl('', []),
+    SpaIndividualValueControl: new FormControl('', []),
+    SpdIndividualValueControl: new FormControl('', []),
+    SpeIndividualValueControl: new FormControl('', []),
     levelControl: new FormControl('', []),
     terastallizeTypeControl: new FormControl('', [])
   });
@@ -74,6 +75,7 @@ export class PokemonSetComponent implements OnInit {
 
   getPokemonSet() {
     this.pokemonSetService.get(this.pokemonSetId).subscribe((data) => {
+      this.setAllPokemonSetFormValues(data);
       this.pokemonSetName = data.setName;
       if (data?.formatLists) {
         this.dataSource = new MatTableDataSource(data.formatLists);
@@ -88,18 +90,72 @@ export class PokemonSetComponent implements OnInit {
     });
   }
 
+  setAllPokemonSetFormValues(pokemonSet: PokemonSetUpdate) {
+    this.updatePokemonSetForm.get('setNameControl').setValue(pokemonSet.setName);
+    this.updatePokemonSetForm.get('nameControl').setValue(pokemonSet.name);
+    this.updatePokemonSetForm.get('speciesControl').setValue(pokemonSet.species);
+    this.updatePokemonSetForm.get('itemControl').setValue(pokemonSet.item);
+    this.updatePokemonSetForm.get('abilityControl').setValue(pokemonSet.ability);
+    this.updatePokemonSetForm.get('moveOneControl').setValue(pokemonSet.moveOne);
+    this.updatePokemonSetForm.get('moveTwoControl').setValue(pokemonSet.moveTwo);
+    this.updatePokemonSetForm.get('moveThreeControl').setValue(pokemonSet.moveThree);
+    this.updatePokemonSetForm.get('moveFourControl').setValue(pokemonSet.moveFour);
+    this.updatePokemonSetForm.get('natureControl').setValue(pokemonSet.nature);
+    this.updatePokemonSetForm.get('HpEffortValueControl').setValue(pokemonSet.hpEffortValue);
+    this.updatePokemonSetForm.get('AtkEffortValueControl').setValue(pokemonSet.atkEffortValue);
+    this.updatePokemonSetForm.get('DefEffortValueControl').setValue(pokemonSet.defEffortValue);
+    this.updatePokemonSetForm.get('SpaEffortValueControl').setValue(pokemonSet.spaEffortValue);
+    this.updatePokemonSetForm.get('SpdEffortValueControl').setValue(pokemonSet.spdEffortValue);
+    this.updatePokemonSetForm.get('SpeEffortValueControl').setValue(pokemonSet.speEffortValue);
+    this.updatePokemonSetForm.get('genderControl').setValue(pokemonSet.gender);
+    this.updatePokemonSetForm.get('HpIndividualValueControl').setValue(pokemonSet.hpIndividualValue);
+    this.updatePokemonSetForm.get('AtkIndividualValueControl').setValue(pokemonSet.atkIndividualValue);
+    this.updatePokemonSetForm.get('DefIndividualValueControl').setValue(pokemonSet.defIndividualValue);
+    this.updatePokemonSetForm.get('SpaIndividualValueControl').setValue(pokemonSet.spaIndividualValue);
+    this.updatePokemonSetForm.get('SpdIndividualValueControl').setValue(pokemonSet.spdIndividualValue);
+    this.updatePokemonSetForm.get('SpeIndividualValueControl').setValue(pokemonSet.speIndividualValue);
+    this.updatePokemonSetForm.get('levelControl').setValue(pokemonSet.level);
+    this.updatePokemonSetForm.get('terastallizeTypeControl').setValue(pokemonSet.terastallizeType);
+  }
+
   updatePokemonSet() {
-    // let name = this.updateFormatListForm.value['updateFormatListControl']
-    // let model = new FormatListUpdate(this.formatListId, name);
-    // this.formatListService.update(model).subscribe((success) => {
-    //   if (success) {
-    //     this.getFormatList();
-    //   } else {
-    //     this.snackBar.open('Either this name already exists, or an error occurred', 'ERROR', {
-    //       duration: 5000
-    //     })
-    //   }
-    // });
+    let model = new PokemonSetUpdate(
+      this.pokemonSetId,
+      this.updatePokemonSetForm.value['setNameControl'],
+      this.updatePokemonSetForm.value['speciesControl'],
+      this.updatePokemonSetForm.value['abilityControl'],
+      this.updatePokemonSetForm.value['moveOneControl'],
+      this.updatePokemonSetForm.value['moveTwoControl'],
+      this.updatePokemonSetForm.value['moveThreeControl'],
+      this.updatePokemonSetForm.value['moveFourControl'],
+      this.updatePokemonSetForm.value['HpEffortValueControl'],
+      this.updatePokemonSetForm.value['AtkEffortValueControl'],
+      this.updatePokemonSetForm.value['DefEffortValueControl'],
+      this.updatePokemonSetForm.value['SpaEffortValueControl'],
+      this.updatePokemonSetForm.value['SpdEffortValueControl'],
+      this.updatePokemonSetForm.value['SpeEffortValueControl'],
+      this.updatePokemonSetForm.value['HpIndividualValueControl'],
+      this.updatePokemonSetForm.value['AtkIndividualValueControl'],
+      this.updatePokemonSetForm.value['DefIndividualValueControl'],
+      this.updatePokemonSetForm.value['SpaIndividualValueControl'],
+      this.updatePokemonSetForm.value['SpdIndividualValueControl'],
+      this.updatePokemonSetForm.value['SpeIndividualValueControl'],
+      this.updatePokemonSetForm.value['natureControl'],
+      this.updatePokemonSetForm.value['nameControl'],
+      this.updatePokemonSetForm.value['itemControl'],
+      this.updatePokemonSetForm.value['genderControl'],
+      this.updatePokemonSetForm.value['levelControl'],
+      this.updatePokemonSetForm.value['terastallizeTypeControl']
+    );
+    this.pokemonSetService.update(model).subscribe((success) => {
+      if (success) {
+        this.getPokemonSet();
+      } else {
+        this.snackBar.open('Either this set name already exists, or an error occurred', 'ERROR', {
+          duration: 5000
+        })
+      }
+    });
   }
 
   deleteFormatListPokemonSet(row) {

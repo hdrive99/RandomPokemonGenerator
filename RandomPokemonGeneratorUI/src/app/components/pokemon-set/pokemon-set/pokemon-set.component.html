@@ -11,8 +11,7 @@
                 Set Name is <strong>required</strong>
             </mat-error>
         </mat-form-field>
-        <button mat-raised-button color="primary" class="mat-button"
-            [disabled]="updatePokemonSetForm.get('setNameControl').hasError('required')">
+        <button mat-raised-button color="primary" class="mat-button" [disabled]="updatePokemonSetForm.invalid">
             Save Pokemon Set
         </button>
     </div>
@@ -21,7 +20,7 @@
             <div class="pokemon-details">
                 <div class="pokemon">
                     <div>Nickname: </div>
-                    <input type="text">
+                    <input matInput type="text" formControlName="nameControl" [errorStateMatcher]="matcher">
                     <img src="https://play.pokemonshowdown.com/sprites/dex/{{pokemonSetName}}.png"
                         onerror="this.src = `https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/MissingNo.png/256px-MissingNo.png`;"
                         class="image" />
@@ -29,67 +28,158 @@
                 <div class="details-container">
                     <strong>Details</strong>
                     <div class="details-content">
-                        <div>Level: </div><input type="text">
+                        <div>Level: </div><input matInput type="number" formControlName="levelControl"
+                            [errorStateMatcher]="matcher">
                         <div></div>
-                        <div>Gender: </div><input type="text">
+                        <div>Gender: </div><input matInput type="text" formControlName="genderControl"
+                            [errorStateMatcher]="matcher">
                         <div></div>
-                        <div>Shiny: </div><input type="text">
+                        <div>Shiny: </div>
+                        <div>
+                            <input type="radio" id="shiny-selected" name="shiny-radio" value="Yes">
+                            <label for="shiny-selected">Yes</label>
+                            <input type="radio" id="not-shiny-selected" name="shiny-radio" value="No">
+                            <label for="not-shiny-selected">No</label>
+                        </div>
                         <div></div>
-                        <div>Tera Type: </div><input type="text">
+                        <div>Tera Type: </div>
+                        <select type="text" formControlName="terastallizeTypeControl" class="tera-type">
+                            <option value="Bug">Bug</option>
+                            <option value="Dark">Dark</option>
+                            <option value="Dragon">Dragon</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Fairy">Fairy</option>
+                            <option value="Fighting">Fighting</option>
+                            <option value="Fire">Fire</option>
+                            <option value="Flying">Flying</option>
+                            <option value="Ghost">Ghost</option>
+                            <option value="Grass">Grass</option>
+                            <option value="Ground">Ground</option>
+                            <option value="Ice">Ice</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Poison">Poison</option>
+                            <option value="Psychic">Psychic</option>
+                            <option value="Rock">Rock</option>
+                            <option value="Steel">Steel</option>
+                            <option value="Water">Water</option>
+                        </select>
                         <div></div>
                     </div>
                 </div>
                 <div class="moves">
                     <div>Moves: </div>
-                    <input type="text" class="move-input">
-                    <input type="text" class="move-input">
-                    <input type="text" class="move-input">
+                    <input matInput type="text" class="move-input" formControlName="moveOneControl"
+                        [errorStateMatcher]="matcher">
+                    <input matInput type="text" class="move-input" formControlName="moveTwoControl"
+                        [errorStateMatcher]="matcher">
+                    <input matInput type="text" class="move-input" formControlName="moveThreeControl"
+                        [errorStateMatcher]="matcher">
                 </div>
                 <div>
-                    <div>Pokemon: </div><input type="text">
+                    <div class="species-error">
+                        Pokemon:
+                        <mat-error *ngIf="updatePokemonSetForm.get('speciesControl').hasError('required')">
+                            <strong>Required!</strong>
+                        </mat-error>
+                    </div>
+                    <input matInput type="text" formControlName="speciesControl" [errorStateMatcher]="matcher">
                 </div>
                 <div>
-                    <div>Item: </div><input type="text">
+                    <div>Item: </div><input matInput type="text" formControlName="itemControl"
+                        [errorStateMatcher]="matcher">
                 </div>
                 <div>
-                    <div>Ability: </div><input type="text">
+                    <div class="ability-error">
+                        Ability:
+                        <mat-error *ngIf="updatePokemonSetForm.get('abilityControl').hasError('required')">
+                            <strong>Required!</strong>
+                        </mat-error>
+                    </div>
+                    <input matInput type="text" formControlName="abilityControl" [errorStateMatcher]="matcher">
                 </div>
                 <div class="last-move">
-                    <div class="empty"></div><input type="text" class="move-input">
+                    <div class="empty"></div><input matInput type="text" class="move-input"
+                        formControlName="moveFourControl" [errorStateMatcher]="matcher">
                 </div>
             </div>
             <div class="pokemon-stats">
                 <div></div>
-                <div>EVs</div>
+                <strong>EVs</strong>
                 <div></div>
-                <div>IVs</div>
-                <div>HP</div>
-                <div><input></div>
+                <strong>IVs</strong>
+                <strong>HP</strong>
+                <div><input matInput type="number" formControlName="HpEffortValueControl" [errorStateMatcher]="matcher">
+                </div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>Atk</div>
-                <div><input></div>
+                <div><input matInput type="number" formControlName="HpIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>Atk</strong>
+                <div><input matInput type="number" formControlName="AtkEffortValueControl"
+                        [errorStateMatcher]="matcher"></div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>Def</div>
-                <div><input></div>
+                <div><input matInput type="number" formControlName="AtkIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>Def</strong>
+                <div><input matInput type="number" formControlName="DefEffortValueControl"
+                        [errorStateMatcher]="matcher"></div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>SpA</div>
-                <div><input></div>
+                <div><input matInput type="number" formControlName="DefIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>SpA</strong>
+                <div><input matInput type="number" formControlName="SpaEffortValueControl"
+                        [errorStateMatcher]="matcher"></div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>SpD</div>
-                <div><input></div>
+                <div><input matInput type="number" formControlName="SpaIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>SpD</strong>
+                <div><input matInput type="number" formControlName="SpdEffortValueControl"
+                        [errorStateMatcher]="matcher"></div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>Spe</div>
-                <div><input></div>
+                <div><input matInput type="number" formControlName="SpdIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>Spe</strong>
+                <div><input matInput type="number" formControlName="SpeEffortValueControl"
+                        [errorStateMatcher]="matcher"></div>
                 <div><input type="range" class="ev-slider" min="0" max="252" step="4"></div>
-                <div><input></div>
-                <div>Remaining:</div>
+                <div><input matInput type="number" formControlName="SpeIndividualValueControl"
+                        [errorStateMatcher]="matcher"></div>
+                <strong>Remaining:</strong>
                 <div>508</div>
-                <div>Nature: <input></div>
+                <div class="nature">
+                    <div class="nature-content">
+                        <strong>Nature:</strong>
+                        <select type="text" formControlName="natureControl" class="nature-dropdown">
+                            <option value="Adamant">Adamant (+Atk, -SpA)</option>
+                            <option value="Bashful">Bashful</option>
+                            <option value="Bold">Bold (+Def, -Atk)</option>
+                            <option value="Brave">Brave (+Atk, -Spe)</option>
+                            <option value="Calm">Calm (+SpD, -Atk)</option>
+                            <option value="Careful">Careful (+SpD, -SpA)</option>
+                            <option value="Docile">Docile</option>
+                            <option value="Gentle">Gentle (+SpD, -Def)</option>
+                            <option value="Hardy">Hardy</option>
+                            <option value="Hasty">Hasty (+Spe, -Def)</option>
+                            <option value="Impish">Impish (+Def, -SpA)</option>
+                            <option value="Jolly">Jolly (+Spe, -SpA)</option>
+                            <option value="Lax">Lax (+Def, -SpD)</option>
+                            <option value="Lonely">Lonely (+Atk, -Def)</option>
+                            <option value="Mild">Mild (+SpA, -Def)</option>
+                            <option value="Modest">Modest (+SpA, -Atk)</option>
+                            <option value="Naive">Naive (+Spe, -SpD)</option>
+                            <option value="Naughty">Naughty (+Atk, -SpD)</option>
+                            <option value="Quiet">Quiet (+SpA, -Spe)</option>
+                            <option value="Quirky">Quirky</option>
+                            <option value="Rash">Rash (+SpA, -SpD)</option>
+                            <option value="Relaxed">Relaxed (+Def, -Spe)</option>
+                            <option value="Sassy">Sassy (+SpD, -Spe)</option>
+                            <option value="Serious">Serious</option>
+                            <option value="Timid">Timid (+Spe, -Atk)</option>
+                        </select>
+                        <mat-error *ngIf="updatePokemonSetForm.get('natureControl').hasError('required')">
+                            <strong>Required!</strong>
+                        </mat-error>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="pokemon-export">
