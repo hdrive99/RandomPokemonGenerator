@@ -287,9 +287,9 @@ export class PokemonSetComponent implements OnInit {
   updateExport(): string {
     this.exportedTeraType = this.updatePokemonSetForm.value['terastallizeTypeControl'] != null ? `Tera Type: ${this.updatePokemonSetForm.value['terastallizeTypeControl']}` : false;
     let model = `` +
-      this.updatePokemonSetForm.value['nameControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['nameControl'] != null ? this.updatePokemonSetForm.value['nameControl'] : ''}` + `|` +
       `${this.updatePokemonSetForm.value['speciesControl']}` + `|` + // validated
-      this.updatePokemonSetForm.value['itemControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['itemControl'] != null ? this.updatePokemonSetForm.value['itemControl'] : ''}` + `|` +
       `${this.updatePokemonSetForm.value['abilityControl']}` + `|` + // validated
       `${this.updatePokemonSetForm.value['moveOneControl'] != null ? this.updatePokemonSetForm.value['moveOneControl'] : ''}` + `,` +
       `${this.updatePokemonSetForm.value['moveTwoControl'] != null ? this.updatePokemonSetForm.value['moveTwoControl'] : ''}` + `,` +
@@ -302,7 +302,7 @@ export class PokemonSetComponent implements OnInit {
       `${this.updatePokemonSetForm.value['SpaEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpaEffortValueControl'] : 0}` + `,` +
       `${this.updatePokemonSetForm.value['SpdEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpdEffortValueControl'] : 0}` + `,` +
       `${this.updatePokemonSetForm.value['SpeEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpeEffortValueControl'] : 0}` + `|` +
-      this.updatePokemonSetForm.value['genderControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['genderControl'] != null ? this.updatePokemonSetForm.value['genderControl'].toUpperCase() : null}` + `|` + // can be null
       `${this.updatePokemonSetForm.value['HpIndividualValueControl'] != null ? this.updatePokemonSetForm.value['HpIndividualValueControl'] : 31}` + `,` +
       `${this.updatePokemonSetForm.value['AtkIndividualValueControl'] != null ? this.updatePokemonSetForm.value['AtkIndividualValueControl'] : 31}` + `,` +
       `${this.updatePokemonSetForm.value['DefIndividualValueControl'] != null ? this.updatePokemonSetForm.value['DefIndividualValueControl'] : 31}` + `,` +
