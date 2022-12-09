@@ -45,7 +45,11 @@ export class PokemonSetService {
   }
 
   // Returns array of JSON objects containing imported sets that are mapped to PokemonSet properties
-  packPokemonSet(importSet): Observable<any[]> {
-    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/importSets`, {model: importSet});
+  importPokemonSet(importSet): Observable<any[]> {
+    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/importSet`, {model: importSet});
+  }
+
+  unpackAndExportSets(exportSet): Observable<any> {
+    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/unpackAndExportSets`, {model: exportSet});
   }
 }

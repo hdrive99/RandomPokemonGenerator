@@ -8,9 +8,18 @@ server.use(jsonServer.bodyParser);
 const {Teams} = require('pokemon-showdown');
 
 // Returns JSON object containing imported sets that are mapped to PokemonSet properties
-server.post('/api/importSets', (req, res, next) => {
+server.post('/api/importSet', (req, res, next) => {
   res.status(200).send(
     Teams.import(req.body['model'])
+  );
+});
+
+// Returns an exportable string of PokemonSets
+server.post('/api/unpackAndExportSets', (req, res, next) => {
+  res.status(200).send(
+    JSON.stringify(Teams.export(
+      Teams.unpack(req.body['model'])
+    ))
   );
 });
 

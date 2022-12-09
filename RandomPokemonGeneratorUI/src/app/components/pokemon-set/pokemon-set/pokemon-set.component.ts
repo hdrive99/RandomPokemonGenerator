@@ -66,6 +66,8 @@ export class PokemonSetComponent implements OnInit {
   allFormatListsFiltered: FormatList[];
   evTotal;
   allTeraTypes = ['Tera Type: Bug', 'Tera Type: Dark', 'Tera Type: Dragon', 'Tera Type: Electric', 'Tera Type: Fairy', 'Tera Type: Fighting', 'Tera Type: Fire', 'Tera Type: Flying', 'Tera Type: Ghost', 'Tera Type: Grass', 'Tera Type: Ground', 'Tera Type: Ice', 'Tera Type: Normal', 'Tera Type: Poison', 'Tera Type: Psychic', 'Tera Type: Rock', 'Tera Type: Steel', 'Tera Type: Water'];
+  exportedTeraType;
+  exportData = '';
   
   constructor(
     private route: ActivatedRoute,
@@ -82,6 +84,7 @@ export class PokemonSetComponent implements OnInit {
     this.updatePokemonSetForm.get('SpaEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpaEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
     this.updatePokemonSetForm.get('SpdEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpdEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
     this.updatePokemonSetForm.get('SpeEffortValueControl').valueChanges.subscribe((value) => { this.updatePokemonSetForm.get('SpeEffortValueControl').setValue(value, { emitEvent: false }); this.calculateRemainingEvs(); });
+    this.updatePokemonSetForm.valueChanges.subscribe(() => { this.updateExport(); });
   }
 
   getPokemonSet() {
@@ -133,31 +136,31 @@ export class PokemonSetComponent implements OnInit {
   updatePokemonSet() {
     let model = new PokemonSetUpdate(
       this.pokemonSetId,
-      this.updatePokemonSetForm.value['setNameControl'],
-      this.updatePokemonSetForm.value['speciesControl'],
-      this.updatePokemonSetForm.value['abilityControl'],
-      this.updatePokemonSetForm.value['moveOneControl'],
-      this.updatePokemonSetForm.value['moveTwoControl'],
-      this.updatePokemonSetForm.value['moveThreeControl'],
-      this.updatePokemonSetForm.value['moveFourControl'],
-      this.updatePokemonSetForm.value['HpEffortValueControl'],
-      this.updatePokemonSetForm.value['AtkEffortValueControl'],
-      this.updatePokemonSetForm.value['DefEffortValueControl'],
-      this.updatePokemonSetForm.value['SpaEffortValueControl'],
-      this.updatePokemonSetForm.value['SpdEffortValueControl'],
-      this.updatePokemonSetForm.value['SpeEffortValueControl'],
-      this.updatePokemonSetForm.value['HpIndividualValueControl'],
-      this.updatePokemonSetForm.value['AtkIndividualValueControl'],
-      this.updatePokemonSetForm.value['DefIndividualValueControl'],
-      this.updatePokemonSetForm.value['SpaIndividualValueControl'],
-      this.updatePokemonSetForm.value['SpdIndividualValueControl'],
-      this.updatePokemonSetForm.value['SpeIndividualValueControl'],
-      this.updatePokemonSetForm.value['natureControl'],
-      this.updatePokemonSetForm.value['nameControl'],
-      this.updatePokemonSetForm.value['itemControl'],
-      this.updatePokemonSetForm.value['genderControl'],
-      this.updatePokemonSetForm.value['levelControl'],
-      this.updatePokemonSetForm.value['terastallizeTypeControl']
+      this.updatePokemonSetForm.value['setNameControl'], // validated
+      this.updatePokemonSetForm.value['speciesControl'], // validated
+      this.updatePokemonSetForm.value['abilityControl'], // validated
+      this.updatePokemonSetForm.value['moveOneControl'] != null ? this.updatePokemonSetForm.value['moveOneControl'] : '',
+      this.updatePokemonSetForm.value['moveTwoControl'] != null ? this.updatePokemonSetForm.value['moveTwoControl'] : '',
+      this.updatePokemonSetForm.value['moveThreeControl'] != null ? this.updatePokemonSetForm.value['moveThreeControl'] : '',
+      this.updatePokemonSetForm.value['moveFourControl'] != null ? this.updatePokemonSetForm.value['moveFourControl'] : '',
+      this.updatePokemonSetForm.value['HpEffortValueControl'] != null ? this.updatePokemonSetForm.value['HpEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['AtkEffortValueControl'] != null ? this.updatePokemonSetForm.value['AtkEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['DefEffortValueControl'] != null ? this.updatePokemonSetForm.value['DefEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['SpaEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpaEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['SpdEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpdEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['SpeEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpeEffortValueControl'] : 0,
+      this.updatePokemonSetForm.value['HpIndividualValueControl'] != null ? this.updatePokemonSetForm.value['HpIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['AtkIndividualValueControl'] != null ? this.updatePokemonSetForm.value['AtkIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['DefIndividualValueControl'] != null ? this.updatePokemonSetForm.value['DefIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['SpaIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpaIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['SpdIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpdIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['SpeIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpeIndividualValueControl'] : 31,
+      this.updatePokemonSetForm.value['natureControl'], // validated
+      this.updatePokemonSetForm.value['nameControl'], // can be null
+      this.updatePokemonSetForm.value['itemControl'], // can be null
+      this.updatePokemonSetForm.value['genderControl'], // can be null
+      this.updatePokemonSetForm.value['levelControl'], // can be null
+      this.updatePokemonSetForm.value['terastallizeTypeControl'] // can be null
     );
     this.pokemonSetService.update(model).subscribe((success) => {
       if (success) {
@@ -247,38 +250,74 @@ export class PokemonSetComponent implements OnInit {
         teraType = el.slice(11);
       }
     });
-    console.log(teraType);
-    this.pokemonSetService.packPokemonSet(input).subscribe((packedJsonSets) => {
+    this.pokemonSetService.importPokemonSet(input).subscribe((importedPokemonSet) => {
       let model = new PokemonSetUpdate(
         this.pokemonSetId,
         this.pokemonSetName,
-        packedJsonSets[0].species,
-        packedJsonSets[0].ability,
-        packedJsonSets[0].moves[0],
-        packedJsonSets[0].moves[1],
-        packedJsonSets[0].moves[2],
-        packedJsonSets[0].moves[3],
-        packedJsonSets[0].evs.hp,
-        packedJsonSets[0].evs.atk,
-        packedJsonSets[0].evs.def,
-        packedJsonSets[0].evs.spa,
-        packedJsonSets[0].evs.spd,
-        packedJsonSets[0].evs.spe,
-        packedJsonSets[0].ivs.hp,
-        packedJsonSets[0].ivs.atk,
-        packedJsonSets[0].ivs.def,
-        packedJsonSets[0].ivs.spa,
-        packedJsonSets[0].ivs.spd,
-        packedJsonSets[0].ivs.spe,
-        packedJsonSets[0].nature,
-        packedJsonSets[0].name,
-        packedJsonSets[0].item,
-        packedJsonSets[0].gender,
-        packedJsonSets[0].level,
+        importedPokemonSet[0].species,
+        importedPokemonSet[0].ability,
+        importedPokemonSet[0].moves[0],
+        importedPokemonSet[0].moves[1],
+        importedPokemonSet[0].moves[2],
+        importedPokemonSet[0].moves[3],
+        importedPokemonSet[0].evs.hp,
+        importedPokemonSet[0].evs.atk,
+        importedPokemonSet[0].evs.def,
+        importedPokemonSet[0].evs.spa,
+        importedPokemonSet[0].evs.spd,
+        importedPokemonSet[0].evs.spe,
+        importedPokemonSet[0].ivs.hp,
+        importedPokemonSet[0].ivs.atk,
+        importedPokemonSet[0].ivs.def,
+        importedPokemonSet[0].ivs.spa,
+        importedPokemonSet[0].ivs.spd,
+        importedPokemonSet[0].ivs.spe,
+        importedPokemonSet[0].nature,
+        importedPokemonSet[0].name,
+        importedPokemonSet[0].item,
+        importedPokemonSet[0].gender,
+        importedPokemonSet[0].level,
         teraType
       );
       this.setAllPokemonSetFormValues(model);
       this.pokemonSpecies = model.species.toLowerCase();
     });
+  }
+
+  updateExport(): string {
+    this.exportedTeraType = this.updatePokemonSetForm.value['terastallizeTypeControl'] != null ? `Tera Type: ${this.updatePokemonSetForm.value['terastallizeTypeControl']}` : false;
+    let model = `` +
+      this.updatePokemonSetForm.value['nameControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['speciesControl']}` + `|` + // validated
+      this.updatePokemonSetForm.value['itemControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['abilityControl']}` + `|` + // validated
+      `${this.updatePokemonSetForm.value['moveOneControl'] != null ? this.updatePokemonSetForm.value['moveOneControl'] : ''}` + `,` +
+      `${this.updatePokemonSetForm.value['moveTwoControl'] != null ? this.updatePokemonSetForm.value['moveTwoControl'] : ''}` + `,` +
+      `${this.updatePokemonSetForm.value['moveThreeControl'] != null ? this.updatePokemonSetForm.value['moveThreeControl'] : ''}` + `,` +
+      `${this.updatePokemonSetForm.value['moveFourControl'] != null ? this.updatePokemonSetForm.value['moveFourControl'] : ''}` + `|` +
+      this.updatePokemonSetForm.value['natureControl'] + `|` + // validated
+      `${this.updatePokemonSetForm.value['HpEffortValueControl'] != null ? this.updatePokemonSetForm.value['HpEffortValueControl'] : 0}` + `,` +
+      `${this.updatePokemonSetForm.value['AtkEffortValueControl'] != null ? this.updatePokemonSetForm.value['AtkEffortValueControl'] : 0}` + `,` +
+      `${this.updatePokemonSetForm.value['DefEffortValueControl'] != null ? this.updatePokemonSetForm.value['DefEffortValueControl'] : 0}` + `,` +
+      `${this.updatePokemonSetForm.value['SpaEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpaEffortValueControl'] : 0}` + `,` +
+      `${this.updatePokemonSetForm.value['SpdEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpdEffortValueControl'] : 0}` + `,` +
+      `${this.updatePokemonSetForm.value['SpeEffortValueControl'] != null ? this.updatePokemonSetForm.value['SpeEffortValueControl'] : 0}` + `|` +
+      this.updatePokemonSetForm.value['genderControl'] + `|` + // can be null
+      `${this.updatePokemonSetForm.value['HpIndividualValueControl'] != null ? this.updatePokemonSetForm.value['HpIndividualValueControl'] : 31}` + `,` +
+      `${this.updatePokemonSetForm.value['AtkIndividualValueControl'] != null ? this.updatePokemonSetForm.value['AtkIndividualValueControl'] : 31}` + `,` +
+      `${this.updatePokemonSetForm.value['DefIndividualValueControl'] != null ? this.updatePokemonSetForm.value['DefIndividualValueControl'] : 31}` + `,` +
+      `${this.updatePokemonSetForm.value['SpaIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpaIndividualValueControl'] : 31}` + `,` +
+      `${this.updatePokemonSetForm.value['SpdIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpdIndividualValueControl'] : 31}` + `,` +
+      `${this.updatePokemonSetForm.value['SpeIndividualValueControl'] != null ? this.updatePokemonSetForm.value['SpeIndividualValueControl'] : 31}` + `|` +
+      `|` + // shiny
+      this.updatePokemonSetForm.value['levelControl'] + `|`; // can be null
+    // + `]`; // happiness, pokeball, hidden power, gigantamax, dynamax level, tera type & then more Pokemon
+    this.pokemonSetService.unpackAndExportSets(model).subscribe((data) => {
+      this.exportData = data;
+      if (this.exportedTeraType) {
+        this.exportData = this.exportData.slice(0, this.exportData.length - 1) + this.exportedTeraType;
+      }
+    });
+    return this.exportData;
   }
 }

@@ -162,9 +162,14 @@
             .pokemon-export-toolbar {
                 background-color: #ddd;
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
                 padding: 10px 12px;
                 gap: 0.8rem;
+                align-items: center;
+
+                .export-title {
+                    font-size: 19px;
+                }
             }
         }
     }

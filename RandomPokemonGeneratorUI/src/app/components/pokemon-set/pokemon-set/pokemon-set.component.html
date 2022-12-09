@@ -193,14 +193,20 @@
         <form class="pokemon-export-container" [formGroup]="importPokemonSetForm" id="importForm">
             <div class="pokemon-export-content">
                 <div class="pokemon-export-textbox-container"><textarea type="textarea" rows="5"
-                        class="pokemon-export-textbox" formControlName="importPokemonSetControl"
-                        form="importForm"></textarea></div>
+                        class="pokemon-export-textbox" formControlName="importPokemonSetControl" form="importForm"
+                        placeholder="Import a Pokemon set here...."></textarea>
+                </div>
                 <div class="pokemon-export-toolbar">
+                    <strong class="export-title">Export Pokemon Set: </strong>
                     <button mat-raised-button color="accent" class="mat-button"
                         [disabled]="importPokemonSetForm.get('importPokemonSetControl').hasError('required')"
                         type="button" (click)="importPokemonSet()">
                         Import Pokemon Set
                     </button>
+                </div>
+                <div class="pokemon-export-textbox-container">
+                    <textarea type="textarea" rows="5" class="pokemon-export-textbox" [value]="exportData"
+                        disabled></textarea>
                 </div>
             </div>
         </form>
