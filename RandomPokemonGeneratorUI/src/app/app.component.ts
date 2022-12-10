@@ -12,7 +12,7 @@ export class AppComponent {
   public routeLinks: RouterLinkI[] = [
     { label: "Format Lists", link: "format-lists" },
     { label: "Pokemon Sets", link: "pokemon-sets" },
-    { label: "Randomizer", link: "randomizer-form" },
+    { label: "Randomizer", link: "randomizer" },
   ];
 
 }

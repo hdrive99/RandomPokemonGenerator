@@ -1,0 +1,87 @@
+<form [formGroup]="randomizerForm" (ngSubmit)="runRandomizer()">
+    <div class="toolbar">
+        <div class="header-title">
+            <h1>Randomizer</h1>
+        </div>
+        <input type="checkbox" (change)="toggleVisibility = !toggleVisibility">
+        <small class="checkbox-text">(Unhide Sets)</small>
+        <small class="small-text">If duplicates aren't allowed, format must have at least double the sets you are
+            generating.</small>
+        <mat-form-field>
+            <mat-select formControlName="allowDuplicatesControl" [errorStateMatcher]="matcher"
+                placeholder="Allow Duplicates?">
+                <mat-option value="0">
+                    No</mat-option>
+                <mat-option value="1">
+                    Yes</mat-option>
+            </mat-select>
+            <mat-error *ngIf="randomizerForm.get('allowDuplicatesControl').hasError('required')">
+                Allow Duplicates rule is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput class="generate-count-input" formControlName="countInputControl" type="text"
+                [errorStateMatcher]="matcher" placeholder="# of Sets to Generate">
+            <mat-error *ngIf="randomizerForm.get('countInputControl').hasError('required')">
+                # of Sets to Generate is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select formControlName="formatListControl" [errorStateMatcher]="matcher" placeholder="Choose Format">
+                <mat-option *ngFor="let formatList of allFormatLists" value="{{formatList.id}}">
+                    {{formatList.name}}</mat-option>
+                <mat-option *ngIf="allFormatLists?.length == 0" value="" disabled>There are no
+                    formats!</mat-option>
+            </mat-select>
+            <mat-error
+                *ngIf="randomizerForm.get('formatListControl').hasError('required') && allFormatLists?.length != 0">
+                Format is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="mat-button" [disabled]="randomizerForm.invalid">
+            Save Pokemon Set
+        </button>
+    </div>
+    <div class="edit-pokemon">
+        <div class="pokemon-export-container">
+            <div class="pokemon-export-content">
+                <div class="pokemon-export-toolbar">
+                    <strong class="export-title">Export Randomized Team: </strong>
+                    <button mat-raised-button color="accent" class="mat-button" (click)="copyTeamOne()" type="button">
+                        Copy to Clipboard
+                    </button>
+                </div>
+                <span class="export-sprites-container">
+                    <img *ngFor="let sprite of teamOneSprites"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
+                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        class="image" />
+                </span>
+                <div class="pokemon-export-textbox-container">
+                    <textarea type="textarea" rows="{{teamOneRowLength}}" [ngClass]="{'hide-text': toggleVisibility}"
+                        class="pokemon-export-textbox" [formControl]="teamOneTextControl"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="pokemon-export-container">
+            <div class="pokemon-export-content">
+                <div class="pokemon-export-toolbar">
+                    <strong class="export-title">Export Randomized Team: </strong>
+                    <button mat-raised-button color="accent" class="mat-button" (click)="copyTeamTwo()" type="button">
+                        Copy to Clipboard
+                    </button>
+                </div>
+                <span class="export-sprites-container">
+                    <img *ngFor="let sprite of teamTwoSprites"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
+                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        class="image" />
+                </span>
+                <div class="pokemon-export-textbox-container">
+                    <textarea type="textarea" rows="{{teamTwoRowLength}}" [ngClass]="{'hide-text': toggleVisibility}"
+                        class="pokemon-export-textbox" [formControl]="teamTwoTextControl"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

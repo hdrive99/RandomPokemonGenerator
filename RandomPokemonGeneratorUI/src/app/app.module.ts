@@ -18,8 +18,7 @@ import { FormatListsComponent } from './components/format-list/format-lists/form
 import { FormatListComponent } from './components/format-list/format-list/format-list.component';
 import { PokemonSetsComponent } from './components/pokemon-set/pokemon-sets/pokemon-sets.component';
 import { PokemonSetComponent } from './components/pokemon-set/pokemon-set/pokemon-set.component';
-import { RandomizerFormComponent } from './components/randomizer/randomizer-form/randomizer-form.component';
-import { RandomizerOutputComponent } from './components/randomizer/randomizer-output/randomizer-output.component';
+import { RandomizerComponent } from './components/randomizer/randomizer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -29,8 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormatListComponent,
     PokemonSetsComponent,
     PokemonSetComponent,
-    RandomizerFormComponent,
-    RandomizerOutputComponent
+    RandomizerComponent
   ],
   imports: [
     BrowserModule,

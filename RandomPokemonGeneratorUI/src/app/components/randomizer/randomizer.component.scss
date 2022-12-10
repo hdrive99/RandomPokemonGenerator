@@ -1,0 +1,82 @@
+@import url('../../app.component.scss');
+
+* {
+    box-sizing: border-box;
+}
+
+.hide-text {
+    color: rgba(0, 0, 0, 0);
+}
+
+.checkbox, 
+.checkbox-text {
+    align-self: center;
+    font-size: x-small;
+}
+
+.small-text {
+    align-self: end;
+}
+
+.generate-count-input {
+    width: auto;
+}
+
+.sprite-img {
+    width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.edit-pokemon {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-bottom: 3.6rem;
+
+    .pokemon-export-container {
+        background-color: #ddd;
+        border: solid 4px grey;
+        width: 47vw;
+
+        .pokemon-export-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            
+            .pokemon-export-textbox-container {
+                flex: 1;
+                width: 100%;
+                height: 100%;
+                background-color: #ddd;
+                padding: 4px;
+
+                .pokemon-export-textbox {
+                    resize: none;
+                    flex: 1;
+                    font-size: 15px;
+                    padding: 4px;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+    
+            .pokemon-export-toolbar {
+                background-color: #ddd;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 12px;
+                gap: 0.8rem;
+                align-items: center;
+            }
+
+            .export-sprites-container {
+                background-color: #ddd;
+                display: flex;
+                padding: 10px 20px;
+                gap: 2.4rem;
+                overflow: auto;
+            }
+        }
+    }
+}
