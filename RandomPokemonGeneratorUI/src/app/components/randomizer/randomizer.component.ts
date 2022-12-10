@@ -59,30 +59,72 @@ export class RandomizerComponent implements OnInit {
     this.formatListService.get(this.randomizerForm.value['formatListControl']).subscribe((data) => {
       let countInput = this.randomizerForm.value['countInputControl'];
       let allowDuplicates = this.randomizerForm.value['allowDuplicatesControl'] == 1 ? true : false; // 1 if true, 0/null/undefined if false
-      if (data.pokemonSets && ((allowDuplicates && data.pokemonSets?.length >= countInput) || (!allowDuplicates && data.pokemonSets?.length >= countInput * 2))) {
-        let firstRandomizedTeam = this.getMultipleRandom(data.pokemonSets, countInput);
+      
+      // Limit 1 species per team
+      let uniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
+      // uniqueSpeciesSetsTuple[0] is set count, uniqueSpeciesSetsTuple[1] is array of Pokemon sets
+
+      if ((allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput) || (!allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput * 2)) {
+        let firstRandomizedTeam = this.getMultipleRandom(uniqueSpeciesSetsTuple[1], countInput);
         let secondRandomizedTeam;
+        let reShuffledUniqueSpeciesSetsTuple;
         if (allowDuplicates) {
-          secondRandomizedTeam = this.getMultipleRandom(data.pokemonSets, countInput);
+          // Allow duplicate sets & 1 species per team, but re-shuffle sets for each species (so when both teams have the same species, their sets can be different)
+          reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
+          secondRandomizedTeam = this.getMultipleRandom(reShuffledUniqueSpeciesSetsTuple[1], countInput);
         } else {
+          // Remove duplicate sets before limiting 1 species per team
           let filteredSets = data.pokemonSets.filter(el => !firstRandomizedTeam.includes(el));
-          secondRandomizedTeam = this.getMultipleRandom(filteredSets, countInput);
+          reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(filteredSets);
+          secondRandomizedTeam = this.getMultipleRandom(reShuffledUniqueSpeciesSetsTuple[1], countInput);
         }
+        // Randomize who gets which team as the 2nd team will have less variety (if allowDuplicates is false), since their possible sets are picked from a sub-set
+        const random = Math.random() < 0.5;
+
         // Set team sprites
         this.teamOneSprites = [];
         this.teamTwoSprites = [];
-        firstRandomizedTeam.forEach((el) => { this.teamOneSprites.push(el.species.toLowerCase()); });
-        secondRandomizedTeam.forEach((el) => { this.teamTwoSprites.push(el.species.toLowerCase()); });
+        firstRandomizedTeam.forEach((el) => { random ? this.teamOneSprites.push(el.species.toLowerCase()) : this.teamTwoSprites.push(el.species.toLowerCase()); });
+        secondRandomizedTeam.forEach((el) => { random ? this.teamTwoSprites.push(el.species.toLowerCase()) : this.teamOneSprites.push(el.species.toLowerCase()); });
 
         // Now pack the 2 teams, then unpack & export
-        this.packToApi(firstRandomizedTeam, 1);
-        this.packToApi(secondRandomizedTeam, 2);
+        this.packToApi(firstRandomizedTeam, random ? 1 : 2);
+        this.packToApi(secondRandomizedTeam, !random ? 1 : 2);
       } else {
-        this.snackBar.open('Either this format has not enough Pokemon sets, or an error occurred', 'ERROR', {
+        this.snackBar.open('This format does not have enough Pokemon sets or unique species', 'ERROR', {
           duration: 5000
-        })
+        });
+        // Reset output on fail
+        this.teamOneSprites = [];
+        this.teamTwoSprites = [];
+        this.teamOneTextControl.patchValue('');
+        this.teamTwoTextControl.patchValue('');
+        this.teamOneRowLength = 23;
+        this.teamTwoRowLength = 23;
       }
     });
+  }
+
+  shuffleSetsAndLimitSpecies(pokemonSets): any[] {
+    let uniqueSpecies = []
+    let uniqueSpeciesSets = []
+    // First shuffle Sets so the first Set of each species isn't always the same
+    const shuffled = [...pokemonSets].sort(() => 0.5 - Math.random());
+    shuffled.forEach((c) => {
+      // Delimit by - to consider variants with same dex-code
+      let species = c.species;
+
+      if (c.species.includes('-')) {
+        species = c.species.split('-')[0];
+      }
+
+      if (!uniqueSpecies.includes(species.toLowerCase())) {
+        uniqueSpecies.push(species.toLowerCase());
+        uniqueSpeciesSets.push(c);
+      }
+    });
+    let tuple = [uniqueSpecies.length, uniqueSpeciesSets];
+    return tuple;
   }
 
   getMultipleRandom(arr, num) {

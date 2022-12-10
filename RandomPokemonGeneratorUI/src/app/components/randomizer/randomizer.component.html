@@ -58,8 +58,10 @@
                         class="image" />
                 </span>
                 <div class="pokemon-export-textbox-container">
-                    <textarea type="textarea" rows="{{teamOneRowLength}}" [ngClass]="{'hide-text': toggleVisibility}"
-                        class="pokemon-export-textbox" [formControl]="teamOneTextControl"></textarea>
+                    <textarea type="textarea"
+                        rows="{{teamOneRowLength > teamTwoRowLength ? teamOneRowLength : teamTwoRowLength}}"
+                        [ngClass]="{'hide-text': toggleVisibility}" class="pokemon-export-textbox"
+                        [formControl]="teamOneTextControl"></textarea>
                 </div>
             </div>
         </div>
@@ -78,8 +80,10 @@
                         class="image" />
                 </span>
                 <div class="pokemon-export-textbox-container">
-                    <textarea type="textarea" rows="{{teamTwoRowLength}}" [ngClass]="{'hide-text': toggleVisibility}"
-                        class="pokemon-export-textbox" [formControl]="teamTwoTextControl"></textarea>
+                    <textarea type="textarea"
+                        rows="{{teamTwoRowLength > teamOneRowLength ? teamTwoRowLength : teamOneRowLength}}"
+                        [ngClass]="{'hide-text': toggleVisibility}" class="pokemon-export-textbox"
+                        [formControl]="teamTwoTextControl"></textarea>
                 </div>
             </div>
         </div>

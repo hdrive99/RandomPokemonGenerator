@@ -76,6 +76,11 @@
                 padding: 10px 20px;
                 gap: 1.6rem;
                 overflow: auto;
+
+                img {
+                    min-height: 119px;
+                    max-height: 119px;
+                }
             }
         }
     }
