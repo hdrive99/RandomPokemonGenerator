@@ -254,7 +254,7 @@ export class PokemonSetComponent implements OnInit {
       let model = new PokemonSetUpdate(
         this.pokemonSetId,
         this.pokemonSetName,
-        importedPokemonSet[0].species,
+        this.capitalizeFirstLetter(importedPokemonSet[0].species),
         importedPokemonSet[0].ability,
         importedPokemonSet[0].moves[0],
         importedPokemonSet[0].moves[1],
@@ -319,5 +319,9 @@ export class PokemonSetComponent implements OnInit {
       }
     });
     return this.exportData;
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 }
