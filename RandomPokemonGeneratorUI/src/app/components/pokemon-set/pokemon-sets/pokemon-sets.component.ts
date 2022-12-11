@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -16,9 +16,9 @@ import { PokemonSetService } from 'src/app/services/pokemon-set.service';
 })
 export class PokemonSetsComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
-  displayedColumns = ['setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount'];
-  tableColumnNames = ['Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Level', 'Nature', '# of Format Lists'];
-  columnsToDisplayWithDelete = ['sprite', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount', 'delete'];
+  displayedColumns = ['species', 'setName', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount'];
+  tableColumnNames = ['Pokemon', 'Set Name', 'Item', 'Ability', 'Tera Type', 'Level', 'Nature', '# of Format Lists'];
+  columnsToDisplayWithDelete = ['sprite', 'species', 'setName', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   pokemonSetForm = new FormGroup({
@@ -46,6 +46,8 @@ export class PokemonSetsComponent implements OnInit {
       })
     ).subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
+      // Initial sort on species, but when user sorts & unsorts, it returns to having no sort, so disable sort clear
+      this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
       this.dataSource.sort = this.sort;
     });
   }

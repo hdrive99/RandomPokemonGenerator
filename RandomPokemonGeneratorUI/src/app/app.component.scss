@@ -30,6 +30,11 @@ table {
     width: 100%;
 }
 
+:host::ng-deep th.mat-header-cell .mat-sort-header-container.mat-sort-header-sorted .mat-sort-header-arrow {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
 tr td, tr {
     border-bottom: 1px solid transparent;
     border-top: 1px solid transparent;

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -19,9 +19,9 @@ import { PokemonSetService } from 'src/app/services/pokemon-set.service';
 })
 export class FormatListComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
-  displayedColumns = ['setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature'];
-  tableColumnNames = ['Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Level', 'Nature'];
-  columnsToDisplayWithDelete = ['sprite', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'delete'];
+  displayedColumns = ['species', 'setName', 'item', 'ability', 'terastallizeType', 'level', 'nature'];
+  tableColumnNames = ['Pokemon', 'Set Name', 'Item', 'Ability', 'Tera Type', 'Level', 'Nature'];
+  columnsToDisplayWithDelete = ['sprite', 'species', 'setName', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   formatListPokemonSetAddForm = new FormGroup({
@@ -53,6 +53,8 @@ export class FormatListComponent implements OnInit {
       this.formatListName = data.name;
       if (data?.pokemonSets) {
         this.dataSource = new MatTableDataSource(data.pokemonSets);
+        // Initial sort on species, but when user sorts & unsorts, it returns to having no sort, so disable sort clear
+        this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
         this.dataSource.sort = this.sort;
         // Reset and re-track existing PokemonSet items in FormatList to prevent unhelpful search results
         this.formatListPokemonSetsIds = [];
