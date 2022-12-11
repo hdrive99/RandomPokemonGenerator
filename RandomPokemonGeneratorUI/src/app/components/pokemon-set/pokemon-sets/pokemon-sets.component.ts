@@ -16,9 +16,9 @@ import { PokemonSetService } from 'src/app/services/pokemon-set.service';
 })
 export class PokemonSetsComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
-  displayedColumns = ['id', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'nature', 'formatListsCount'];
-  tableColumnNames = ['ID', 'Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Nature', '# of Format Lists'];
-  columnsToDisplayWithDelete = ['sprite', 'id', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'nature', 'formatListsCount', 'delete'];
+  displayedColumns = ['setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount'];
+  tableColumnNames = ['Set Name', 'Pokemon', 'Item', 'Ability', 'Tera Type', 'Level', 'Nature', '# of Format Lists'];
+  columnsToDisplayWithDelete = ['sprite', 'setName', 'species', 'item', 'ability', 'terastallizeType', 'level', 'nature', 'formatListsCount', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   pokemonSetForm = new FormGroup({

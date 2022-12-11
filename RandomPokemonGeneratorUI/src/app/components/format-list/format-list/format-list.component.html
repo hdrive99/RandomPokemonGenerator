@@ -1,7 +1,7 @@
 <form class="toolbar" [formGroup]="updateFormatListForm" (ngSubmit)="updateFormatList()">
     <div class="header-title">
         <h1>Viewing Format List: </h1>
-        <h2>[ID: {{formatListId}}] {{formatListName}}</h2>
+        <h2>{{formatListName}}</h2>
     </div>
     <mat-form-field>
         <input matInput type="text" formControlName="updateFormatListControl" [errorStateMatcher]="matcher"

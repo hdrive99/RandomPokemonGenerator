@@ -2,7 +2,7 @@
     <div class="toolbar">
         <div class="header-title">
             <h1>Viewing Pokemon Set: </h1>
-            <h2>[ID: {{pokemonSetId}}] {{pokemonSetName}}</h2>
+            <h2>{{pokemonSetName}}</h2>
         </div>
         <mat-form-field>
             <input matInput type="text" formControlName="setNameControl" [errorStateMatcher]="matcher"
@@ -215,7 +215,7 @@
 <form class="toolbar table-footer" [formGroup]="pokemonSetFormatListAddForm" (ngSubmit)="addPokemonSetFormatList()">
     <div class="header-title">
         <h1>Format Lists containing</h1>
-        <h2>[ID: {{pokemonSetId}}] {{pokemonSetName}}:</h2>
+        <h2>{{pokemonSetName}}:</h2>
     </div>
     <mat-form-field>
         <mat-select formControlName="pokemonSetFormatListAddControl" [errorStateMatcher]="matcher"

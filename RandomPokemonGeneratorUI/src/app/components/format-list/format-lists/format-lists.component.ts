@@ -16,9 +16,9 @@ import { MyErrorStateMatcher } from 'src/app/services/my-error-state-matcher.ser
 })
 export class FormatListsComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
-  displayedColumns = ['id', 'name', 'pokemonSetsCount'];
-  tableColumnNames = ['ID', 'Name', '# of Pokemon Sets'];
-  columnsToDisplayWithDelete = ['id', 'name', 'pokemonSetsCount', 'delete'];
+  displayedColumns = ['name', 'pokemonSetsCount'];
+  tableColumnNames = ['Name', '# of Pokemon Sets'];
+  columnsToDisplayWithDelete = ['name', 'pokemonSetsCount', 'delete'];
   @ViewChild(MatSort) sort: MatSort;
 
   formatListForm = new FormGroup({
