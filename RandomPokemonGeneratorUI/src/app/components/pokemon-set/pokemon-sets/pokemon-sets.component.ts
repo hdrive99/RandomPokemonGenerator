@@ -46,7 +46,7 @@ export class PokemonSetsComponent implements OnInit {
       })
     ).subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
-      // Initial sort on species, but when user sorts & unsorts, it returns to having no sort, so disable sort clear
+      // Initial sort on species
       this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
       this.dataSource.sort = this.sort;
     });

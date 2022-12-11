@@ -53,7 +53,7 @@ export class FormatListComponent implements OnInit {
       this.formatListName = data.name;
       if (data?.pokemonSets) {
         this.dataSource = new MatTableDataSource(data.pokemonSets);
-        // Initial sort on species, but when user sorts & unsorts, it returns to having no sort, so disable sort clear
+        // Initial sort on species
         this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
         this.dataSource.sort = this.sort;
         // Reset and re-track existing PokemonSet items in FormatList to prevent unhelpful search results
