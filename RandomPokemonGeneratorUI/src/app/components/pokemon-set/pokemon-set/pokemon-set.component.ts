@@ -250,11 +250,24 @@ export class PokemonSetComponent implements OnInit {
         teraType = el.slice(11);
       }
     });
+
+    // Store original species to avoid - character from breaking speciesControl value (needed for sprites, though some are still broken)
+    // (Known: breaks upon nicknamed imports with special characters)
+    // (Also has weird spacing on species export but this is still a valid export)
+    let speciesFull = input.split('  \n')[0].split(' @')[0];
+    if (speciesFull.includes('-')) {
+      if (speciesFull.includes('.')) {
+        speciesFull = 'Mr. Mime-Galar';
+      } else {
+        speciesFull = speciesFull.split(' ')[0];
+      }
+    } // At the moment, all species with a space are genderless, so splitting by item ' @' is enough to return only the species - without ' (M)'
+    
     this.pokemonSetService.importPokemonSet(input).subscribe((importedPokemonSet) => {
       let model = new PokemonSetUpdate(
         this.pokemonSetId,
         this.pokemonSetName,
-        this.capitalizeFirstLetter(importedPokemonSet[0].species),
+        this.capitalizeFirstLetter(speciesFull),
         importedPokemonSet[0].ability,
         importedPokemonSet[0].moves[0],
         importedPokemonSet[0].moves[1],
