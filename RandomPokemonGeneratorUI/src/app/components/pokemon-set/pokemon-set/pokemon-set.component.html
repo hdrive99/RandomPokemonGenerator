@@ -23,7 +23,7 @@
                     <input matInput type="text" formControlName="nameControl" [errorStateMatcher]="matcher">
                     <img src="https://play.pokemonshowdown.com/sprites/dex/{{pokemonSpecies}}.png"
                         name="{{pokemonSpecies}}"
-                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        onerror="this.onerror = null; this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                         class="image" />
                 </div>
                 <div class="details-container">

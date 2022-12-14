@@ -54,7 +54,7 @@
                 <span class="export-sprites-container">
                     <img *ngFor="let sprite of teamOneSprites"
                         src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
-                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        onerror="this.onerror = null; this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                         class="image" />
                 </span>
                 <div class="pokemon-export-textbox-container">
@@ -76,7 +76,7 @@
                 <span class="export-sprites-container">
                     <img *ngFor="let sprite of teamTwoSprites"
                         src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
-                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        onerror="this.onerror = null; this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                         class="image" />
                 </span>
                 <div class="pokemon-export-textbox-container">
