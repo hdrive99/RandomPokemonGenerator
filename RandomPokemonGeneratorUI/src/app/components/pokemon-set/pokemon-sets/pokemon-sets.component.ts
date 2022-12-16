@@ -26,6 +26,8 @@ export class PokemonSetsComponent implements OnInit {
   });
   matcher = new MyErrorStateMatcher();
 
+  firstRun = true;
+
   constructor(
     private pokemonSetService: PokemonSetService,
     private router: Router,
@@ -45,10 +47,13 @@ export class PokemonSetsComponent implements OnInit {
         return data;
       })
     ).subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.data = data;
       // Initial sort on species
-      this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
-      this.dataSource.sort = this.sort;
+      if (this.firstRun) { // Fix invert sort on every PokemonSet delete
+        this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
+        this.dataSource.sort = this.sort;
+        this.firstRun = false;
+      }
     });
   }
 

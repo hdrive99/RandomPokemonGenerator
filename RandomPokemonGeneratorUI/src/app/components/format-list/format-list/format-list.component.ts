@@ -37,6 +37,8 @@ export class FormatListComponent implements OnInit {
   formatListPokemonSetsIds = [];
   allPokemonSetsFiltered: PokemonSet[];
 
+  firstRun = true;
+
   constructor(
     private route: ActivatedRoute,
     private formatListService: FormatListService,
@@ -52,10 +54,13 @@ export class FormatListComponent implements OnInit {
     this.formatListService.get(this.formatListId).subscribe((data) => {
       this.formatListName = data.name;
       if (data?.pokemonSets) {
-        this.dataSource = new MatTableDataSource(data.pokemonSets);
+        this.dataSource.data = data.pokemonSets;
         // Initial sort on species
-        this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
-        this.dataSource.sort = this.sort;
+        if (this.firstRun) { // Fix invert sort on every PokemonSet add/delete
+          this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
+          this.dataSource.sort = this.sort;
+          this.firstRun = false;
+        }
         // Reset and re-track existing PokemonSet items in FormatList to prevent unhelpful search results
         this.formatListPokemonSetsIds = [];
         data.pokemonSets.forEach(element => {
