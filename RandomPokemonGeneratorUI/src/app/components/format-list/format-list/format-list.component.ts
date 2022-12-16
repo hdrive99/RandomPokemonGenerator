@@ -38,6 +38,7 @@ export class FormatListComponent implements OnInit {
   allPokemonSetsFiltered: PokemonSet[];
 
   firstRun = true;
+  shouldScrollToBottom = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,6 +116,7 @@ export class FormatListComponent implements OnInit {
     this.formatListService.addPokemonSet(model).subscribe((success) => {
       if (success) {
         this.getFormatList();
+        this.shouldScrollToBottom = true;
       } else {
         this.snackBar.open('Something went wrong while adding this pokemon set', 'ERROR', {
           duration: 5000
@@ -131,6 +133,14 @@ export class FormatListComponent implements OnInit {
       })
     ).subscribe((data) => {
       this.allPokemonSetsFiltered = data;
+      if (this.shouldScrollToBottom) {
+        this.scrollToBottom();
+      }
     });
+  }
+  
+  scrollToBottom(): void {
+    document.getElementById('scrollTarget').scrollIntoView();
+    this.shouldScrollToBottom = false;
   }
 }

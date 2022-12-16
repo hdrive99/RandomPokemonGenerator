@@ -25,13 +25,13 @@
                 Delete
             </button>
             <span *ngIf="!!element.deleteConfirm" class="delete-confirm-cancel-button">
-                <button mat-raised-button color="accent" class="warning-button"
-                    (click)="deleteFormatList(element); $event.stopPropagation()">
-                    Yes
-                </button>
                 <button mat-raised-button color="basic" class="warning-button"
                     (click)="cancelDeleteConfirm(element); $event.stopPropagation()">
                     No
+                </button>
+                <button mat-raised-button color="accent" class="warning-button"
+                    (click)="deleteFormatList(element); $event.stopPropagation()">
+                    Yes
                 </button>
             </span>
         </td>
