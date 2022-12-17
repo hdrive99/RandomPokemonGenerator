@@ -53,7 +53,8 @@
                 </div>
                 <span class="export-sprites-container">
                     <img *ngFor="let sprite of teamOneSprites"
-                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea')}}.png"
+                        name="{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea')}}"
                         onerror="this.onerror = null; this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                         class="image" />
                 </span>
@@ -75,7 +76,8 @@
                 </div>
                 <span class="export-sprites-container">
                     <img *ngFor="let sprite of teamTwoSprites"
-                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite}}.png" name="{{sprite}}"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea')}}.png"
+                        name="{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea')}}"
                         onerror="this.onerror = null; this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                         class="image" />
                 </span>
