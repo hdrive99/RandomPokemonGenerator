@@ -16,8 +16,8 @@
     <ng-container matColumnDef="sprite">
         <th mat-header-cell *matHeaderCellDef aria-label="row sprites">Sprite</th>
         <td mat-cell *matCellDef="let row">
-            <img src="https://play.pokemonshowdown.com/sprites/dex/{{row['species'].replace(' ', '').replace('’', '').replace('\'', '').toLowerCase().replace('-paldea-', '-paldea')}}.png"
-                name="{{row['species'].replace(' ', '').replace('’', '').replace('\'', '').toLowerCase().replace('-paldea-', '-paldea')}}"
+            <img src="https://play.pokemonshowdown.com/sprites/dex/{{row['species'].replace(' ', '').replace('’', '').replace('\'', '').toLowerCase().replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu')}}.png"
+                name="{{row['species'].replace(' ', '').replace('’', '').replace('\'', '').toLowerCase().replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu')}}"
                 onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
                 class="sprite-img" />
         </td>
