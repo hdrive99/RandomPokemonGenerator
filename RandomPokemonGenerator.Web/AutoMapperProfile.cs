@@ -12,6 +12,7 @@ namespace RandomPokemonGenerator.Web
             CreateMap<PokemonSet, GetPokemonSetDto>();
             CreateMap<AddPokemonSetDto, PokemonSet>();
             CreateMap<UpdatePokemonSetDto, PokemonSet>();
+            CreateMap<PokemonSet, GetTruncatedPokemonSetDto>();
 
             CreateMap<FormatList, GetFormatListDto>();
             CreateMap<AddFormatListDto, FormatList>();

@@ -39,7 +39,7 @@ export class PokemonSetsComponent implements OnInit {
   }
 
   getAllPokemonSets() {
-    this.pokemonSetService.getAll().pipe(
+    this.pokemonSetService.getAllTruncated().pipe(
       map((data) => {
         data.forEach(element => {
           element['formatListsCount'] = element['formatLists'].length;

@@ -126,7 +126,7 @@ export class FormatListComponent implements OnInit {
   }
 
   getAllPokemonSetsFiltered() {
-    this.pokemonSetService.getAll().pipe(
+    this.pokemonSetService.getAllTruncated().pipe(
       map((data) => {
         data = data.filter(item => !this.formatListPokemonSetsIds.includes(item.id));
         return data;

@@ -24,6 +24,11 @@ namespace RandomPokemonGenerator.Web.Controllers
         {
             return Ok(await _pokemonSetService.GetAllPokemonSets());
         }
+        [HttpGet("GetTruncated")]
+        public async Task<ActionResult<List<GetTruncatedPokemonSetDto>>> GetAllTruncatedPokemonSets()
+        {
+            return Ok(await _pokemonSetService.GetAllTruncatedPokemonSets());
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPokemonSetDto>> GetPokemonSetById(int id)
         {

@@ -28,6 +28,10 @@ export class PokemonSetService {
     return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet`);
   }
 
+  getAllTruncated(): Observable<PokemonSet[]> {
+    return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet/GetTruncated`);
+  }
+
   get(pokemonSetId: number): Observable<PokemonSet> {
     return this.http.get<PokemonSet>(`${environment.BASE_API_PATH}/PokemonSet/${pokemonSetId}`);
   }

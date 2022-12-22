@@ -37,6 +37,10 @@ namespace RandomPokemonGenerator.Web.Services
         {
             return await _context.PokemonSets.Include(c => c.FormatLists).Select(c => _mapper.Map<GetPokemonSetDto>(c)).ToListAsync();
         }
+        public async Task<List<GetTruncatedPokemonSetDto>> GetAllTruncatedPokemonSets()
+        {
+            return await _context.PokemonSets.Include(c => c.FormatLists).Select(c => new GetTruncatedPokemonSetDto() { Id = c.Id, SetName = c.SetName, Species = c.Species, Item = c.Item, Ability = c.Ability, Nature = c.Nature, Level = c.Level, TerastallizeType = c.TerastallizeType, FormatLists = c.FormatLists }).ToListAsync();
+        }
         public async Task<GetPokemonSetDto> GetPokemonSetById(int id)
         {
             return _mapper.Map<GetPokemonSetDto>(await _context.PokemonSets.Include(c => c.FormatLists).FirstOrDefaultAsync(c => c.Id == id));
