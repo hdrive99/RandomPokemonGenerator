@@ -54,24 +54,34 @@ export class RandomizerComponent implements OnInit {
     });
   }
   
-  runRandomizer() {
+  runRandomizer(fetchWithoutRandomizing?: boolean) {
     // Get inputted FormatList, determine if there are enough PokemonSets, then randomly copies sets from it
     this.formatListService.get(this.randomizerForm.value['formatListControl']).subscribe((data) => {
       let countInput = this.randomizerForm.value['countInputControl'];
       let allowDuplicates = this.randomizerForm.value['allowDuplicatesControl'] == 1 ? true : false; // 1 if true, 0/null/undefined if false
+      allowDuplicates = fetchWithoutRandomizing ? true : allowDuplicates;
       
       // Limit 1 species per team
-      let uniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
+      let uniqueSpeciesSetsTuple
+      if (!fetchWithoutRandomizing) {
+        uniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
+      } else {
+        uniqueSpeciesSetsTuple = [data.pokemonSets.length, data.pokemonSets]; // Export all sets without caring about species count
+      }
       // uniqueSpeciesSetsTuple[0] is set count, uniqueSpeciesSetsTuple[1] is array of Pokemon sets
 
       if ((allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput) || (!allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput * 2)) {
-        let firstRandomizedTeam = this.getMultipleRandom(uniqueSpeciesSetsTuple[1], countInput);
+        let firstRandomizedTeam = !fetchWithoutRandomizing ? this.getMultipleRandom(uniqueSpeciesSetsTuple[1], countInput) : uniqueSpeciesSetsTuple[1];
         let secondRandomizedTeam;
         let reShuffledUniqueSpeciesSetsTuple;
         if (allowDuplicates) {
           // Allow duplicate sets & 1 species per team, but re-shuffle sets for each species (so when both teams have the same species, their sets can be different)
-          reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
-          secondRandomizedTeam = this.getMultipleRandom(reShuffledUniqueSpeciesSetsTuple[1], countInput);
+          if (!fetchWithoutRandomizing) {
+            reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
+            secondRandomizedTeam = this.getMultipleRandom(reShuffledUniqueSpeciesSetsTuple[1], countInput);
+          } else {
+            secondRandomizedTeam = firstRandomizedTeam; // Export all sets without randomizing the team
+          }
         } else {
           // Remove duplicate sets before limiting 1 species per team
           let filteredSets = data.pokemonSets.filter(el => !firstRandomizedTeam.includes(el));

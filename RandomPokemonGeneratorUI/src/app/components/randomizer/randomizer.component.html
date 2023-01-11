@@ -41,6 +41,10 @@
         <button mat-raised-button color="primary" class="mat-button" [disabled]="randomizerForm.invalid">
             Randomize
         </button>
+        <button type="button" mat-raised-button color="accent" class="mat-button" [disabled]="randomizerForm.invalid"
+            (click)="runRandomizer(true)">
+            Get All Sets
+        </button>
     </div>
     <div class="edit-pokemon">
         <div class="pokemon-export-container">
