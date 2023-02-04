@@ -37,16 +37,15 @@ export class FormatListsComponent implements OnInit {
   }
 
   getAllFormatLists() {
-    this.formatListService.getAll().pipe(
-      map((data) => {
-        data.forEach(element => {
-          element['pokemonSetsCount'] = element['pokemonSets'].length;
-        });
-        return data;
-      })
-    ).subscribe((data) => {
+    this.formatListService.getAll().subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
+
+      data.forEach(element => {
+        this.formatListService.get(element.id).subscribe((list) => {
+          element['pokemonSetsCount'] = list.pokemonSets.length;
+        });
+      });
     });
   }
 

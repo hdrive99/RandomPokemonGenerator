@@ -35,7 +35,7 @@ namespace RandomPokemonGenerator.Web.Services
         }
         public async Task<List<GetFormatListDto>> GetAllFormatLists()
         {
-            return await _context.FormatLists.Include(c => c.PokemonSets).Select(c => _mapper.Map<GetFormatListDto>(c)).ToListAsync();
+            return await _context.FormatLists.Select(c => _mapper.Map<GetFormatListDto>(c)).ToListAsync();
         }
         public async Task<GetFormatListDto> GetFormatListById(int id)
         {
