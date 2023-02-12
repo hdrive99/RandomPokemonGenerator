@@ -222,7 +222,7 @@
             placeholder="Choose Format">
             <mat-option *ngFor="let formatList of allFormatListsFiltered" value="{{formatList.id}}">
                 {{formatList.name}}</mat-option>
-            <mat-option *ngIf="allFormatListsFiltered?.length == 0" value="" disabled>Your list is in all
+            <mat-option *ngIf="allFormatListsFiltered?.length == 0" value="" disabled>Your set is in all
                 formats!</mat-option>
         </mat-select>
         <mat-error

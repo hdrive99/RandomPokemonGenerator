@@ -62,7 +62,7 @@ export class RandomizerComponent implements OnInit {
       allowDuplicates = fetchWithoutRandomizing ? true : allowDuplicates;
       
       // Limit 1 species per team
-      let uniqueSpeciesSetsTuple
+      let uniqueSpeciesSetsTuple;
       if (!fetchWithoutRandomizing) {
         uniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
       } else {

@@ -109,5 +109,35 @@ namespace RandomPokemonGenerator.Web.Services
                 return false;
             }
         }
+
+        public async Task<string> ClonePokemonSetsFromFormatList(int fromFormatListId, int toFormatListId)
+        {
+            var fromFormatList = await _context.FormatLists.Include(c => c.PokemonSets).FirstOrDefaultAsync(c => c.Id == fromFormatListId);
+            var toFormatList = await _context.FormatLists.Include(c => c.PokemonSets).FirstOrDefaultAsync(c => c.Id == toFormatListId);
+
+            try
+            {
+                for (int i = 0; i < fromFormatList.PokemonSets.Count; i++)
+                {
+                    var setId = fromFormatList.PokemonSets[i].Id;
+                    var pokemonSet = await _context.PokemonSets.FirstOrDefaultAsync(c => c.Id == setId);
+                    toFormatList.PokemonSets.Add(pokemonSet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return "Successfully saved changes to database.";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

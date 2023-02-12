@@ -11,5 +11,6 @@ namespace RandomPokemonGenerator.Web.Services
         Task<bool> DeleteFormatList(int id);
         Task<bool> AddFormatListPokemonSet(AddFormatListPokemonSetDto newFormatListPokemonSet);
         Task<bool> DeleteFormatListPokemonSet(AddFormatListPokemonSetDto deleteFormatListPokemonSet);
+        Task<string> ClonePokemonSetsFromFormatList(int fromFormatListId, int toFormatListId);
     }
 }

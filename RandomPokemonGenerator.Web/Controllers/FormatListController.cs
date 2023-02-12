@@ -49,5 +49,11 @@ namespace RandomPokemonGenerator.Web.Controllers
         {
             return Ok(await _formatListService.DeleteFormatListPokemonSet(deleteFormatListPokemonSet));
         }
+
+        [HttpPut("CloneList/{fromFormatListId}/{toFormatListId}")]
+        public async Task<ActionResult<string>> ClonePokemonSetsFromFormatList(int fromFormatListId, int toFormatListId)
+        {
+            return Ok(await _formatListService.ClonePokemonSetsFromFormatList(fromFormatListId, toFormatListId));
+        }
     }
 }
