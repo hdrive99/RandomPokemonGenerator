@@ -7,10 +7,11 @@
             Sets)</mat-checkbox>
         <small class="small-text">If duplicates aren't allowed, format must have at least double the sets you are
             generating.</small>
-        <mat-checkbox class="checkbox" formControlName="allowDuplicatesControl" id="allowDuplicatesControl">Allow
+        <mat-checkbox class="checkbox" formControlName="allowDuplicatesControl" id="allowDuplicatesControl"
+            [checked]="allowDuplicatesChecked">Allow
             Duplicate Sets</mat-checkbox>
-        <mat-checkbox class="checkbox" formControlName="teamSpeciesReusableControl"
-            id="teamSpeciesReusableControl">Allow
+        <mat-checkbox class="checkbox" formControlName="teamSpeciesReusableControl" id="teamSpeciesReusableControl"
+            (change)="toggleAllowDuplicates()">Allow
             Duplicate Species</mat-checkbox>
         <mat-form-field class="generator-inputs">
             <input matInput formControlName="countInputControl" type="text" [errorStateMatcher]="matcher"
@@ -31,6 +32,10 @@
                 Format is <strong>required</strong>
             </mat-error>
         </mat-form-field>
+        <button type="button" mat-raised-button class="mat-button" [disabled]="randomizerForm.invalid"
+            (click)="runRandomizer(false, true)">
+            FFA
+        </button>
         <button mat-raised-button color="primary" class="mat-button" [disabled]="randomizerForm.invalid">
             Randomize
         </button>
@@ -83,6 +88,52 @@
                         rows="{{teamTwoRowLength > teamOneRowLength ? teamTwoRowLength : teamOneRowLength}}"
                         [ngClass]="{'hide-text': toggleVisibility}" class="pokemon-export-textbox"
                         [formControl]="teamTwoTextControl"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="pokemon-export-container" *ngIf="showFourTeams">
+            <div class="pokemon-export-content">
+                <div class="pokemon-export-toolbar">
+                    <strong class="export-title">Export Randomized Team: </strong>
+                    <button mat-raised-button color="accent" class="mat-button" (click)="copyTeamThree()" type="button">
+                        Copy to Clipboard
+                    </button>
+                </div>
+                <span class="export-sprites-container">
+                    <img *ngFor="let sprite of teamThreeSprites"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu').replace('chien-pao', 'chienpao').replace('wo-chien', 'wochien').replace('chi-yu', 'chiyu')}}.png"
+                        name="{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu').replace('chien-pao', 'chienpao').replace('wo-chien', 'wochien').replace('chi-yu', 'chiyu')}}"
+                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        class="image" />
+                </span>
+                <div class="pokemon-export-textbox-container">
+                    <textarea type="textarea"
+                        rows="{{teamThreeRowLength > teamFourRowLength ? teamThreeRowLength : teamFourRowLength}}"
+                        [ngClass]="{'hide-text': toggleVisibility}" class="pokemon-export-textbox"
+                        [formControl]="teamThreeTextControl"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="pokemon-export-container" *ngIf="showFourTeams">
+            <div class="pokemon-export-content">
+                <div class="pokemon-export-toolbar">
+                    <strong class="export-title">Export Randomized Team: </strong>
+                    <button mat-raised-button color="accent" class="mat-button" (click)="copyTeamFour()" type="button">
+                        Copy to Clipboard
+                    </button>
+                </div>
+                <span class="export-sprites-container">
+                    <img *ngFor="let sprite of teamFourSprites"
+                        src="https://play.pokemonshowdown.com/sprites/dex/{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu').replace('chien-pao', 'chienpao').replace('wo-chien', 'wochien').replace('chi-yu', 'chiyu')}}.png"
+                        name="{{sprite.replace(' ', '').replace('’', '').replace('\'', '').replace('-paldea-', '-paldea').replace('ting-lu', 'tinglu').replace('chien-pao', 'chienpao').replace('wo-chien', 'wochien').replace('chi-yu', 'chiyu')}}"
+                        onerror="this.src = (this.src == `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`) ? `../../../../assets/MissingNo.png` : `https://play.pokemonshowdown.com/sprites/gen5/` + this.name + `.png`;"
+                        class="image" />
+                </span>
+                <div class="pokemon-export-textbox-container">
+                    <textarea type="textarea"
+                        rows="{{teamFourRowLength > teamThreeRowLength ? teamFourRowLength : teamThreeRowLength}}"
+                        [ngClass]="{'hide-text': toggleVisibility}" class="pokemon-export-textbox"
+                        [formControl]="teamFourTextControl"></textarea>
                 </div>
             </div>
         </div>

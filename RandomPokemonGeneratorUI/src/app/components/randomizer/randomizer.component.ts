@@ -24,12 +24,20 @@ export class RandomizerComponent implements OnInit {
 
   teamOneSprites = [];
   teamTwoSprites = [];
+  teamThreeSprites = [];
+  teamFourSprites = [];
   teamOneTextControl = new FormControl({value: '', disabled: true}, []);
   teamTwoTextControl = new FormControl({value: '', disabled: true}, []);
+  teamThreeTextControl = new FormControl({value: '', disabled: true}, []);
+  teamFourTextControl = new FormControl({value: '', disabled: true}, []);
   teamOneRowLength = 23;
   teamTwoRowLength = 23;
+  teamThreeRowLength = 23;
+  teamFourRowLength = 23;
 
   toggleVisibility = true;
+  allowDuplicatesChecked: boolean;
+  showFourTeams = false;
 
   constructor(
     private formatListService: FormatListService,
@@ -38,6 +46,7 @@ export class RandomizerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.randomizerForm.get('allowDuplicatesControl').disable();
     this.getAllFilterLists();
     // Set height of team export textarea
     this.teamOneTextControl.valueChanges.subscribe((data) => {
@@ -45,6 +54,12 @@ export class RandomizerComponent implements OnInit {
     });
     this.teamTwoTextControl.valueChanges.subscribe((data) => {
       this.teamTwoRowLength = data.split(/\r\n|\r|\n/).length;
+    });
+    this.teamThreeTextControl.valueChanges.subscribe((data) => {
+      this.teamThreeRowLength = data.split(/\r\n|\r|\n/).length;
+    });
+    this.teamFourTextControl.valueChanges.subscribe((data) => {
+      this.teamFourRowLength = data.split(/\r\n|\r|\n/).length;
     });
   }
 
@@ -54,7 +69,9 @@ export class RandomizerComponent implements OnInit {
     });
   }
   
-  runRandomizer(fetchWithoutRandomizing?: boolean) {
+  runRandomizer(fetchWithoutRandomizing?: boolean, fourTeams?: boolean) {
+    if (!fourTeams) { this.showFourTeams = false; }
+
     // Get inputted FormatList, determine if there are enough PokemonSets, then randomly copies sets from it
     this.formatListService.get(this.randomizerForm.value['formatListControl']).subscribe((data) => {
       let countInput = this.randomizerForm.value['countInputControl'];
@@ -71,11 +88,13 @@ export class RandomizerComponent implements OnInit {
       }
       // uniqueSpeciesSetsTuple[0] is set count, uniqueSpeciesSetsTuple[1] is array of Pokemon sets
 
-      if ((allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput) || (!allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput * 2)) {
+      if ((allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput) || (!allowDuplicates && uniqueSpeciesSetsTuple[0] >= countInput * (fourTeams ? 4 : 2))) {
         let firstRandomizedTeam = !fetchWithoutRandomizing ? this.getMultipleRandom(uniqueSpeciesSetsTuple[1], countInput) : uniqueSpeciesSetsTuple[1];
         let secondRandomizedTeam;
+        let thirdRandomizedTeam;
+        let fourthRandomizedTeam;
         let reShuffledUniqueSpeciesSetsTuple;
-        if (allowDuplicates && teamSpeciesReusable) {
+        if (allowDuplicates) {
           // Allow duplicate sets & 1 species per team, but re-shuffle sets for each species (so when both teams have the same species, their sets can be different)
           if (!fetchWithoutRandomizing) {
             reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(data.pokemonSets);
@@ -83,7 +102,7 @@ export class RandomizerComponent implements OnInit {
           } else {
             secondRandomizedTeam = firstRandomizedTeam; // Export all sets without randomizing the team
           }
-        } else if (teamSpeciesReusable) {
+        } else if (teamSpeciesReusable || fetchWithoutRandomizing) {
           // Remove duplicate sets before limiting 1 species per team
           let filteredSets = data.pokemonSets.filter(el => !firstRandomizedTeam.includes(el));
           reShuffledUniqueSpeciesSetsTuple = this.shuffleSetsAndLimitSpecies(filteredSets);
@@ -92,19 +111,36 @@ export class RandomizerComponent implements OnInit {
           // Remove duplicate sets & species by filtering on uniqueSpeciesSetsTuple[1]
           let filteredSets = uniqueSpeciesSetsTuple[1].filter(el => !firstRandomizedTeam.includes(el));
           secondRandomizedTeam = this.getMultipleRandom(filteredSets, countInput);
+
+          if (fourTeams) {
+            thirdRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !secondRandomizedTeam.includes(el)), countInput);
+            fourthRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !thirdRandomizedTeam.includes(el)), countInput);
+          }
         }
         // Randomize who gets which team as the 2nd team will have less variety (if allowDuplicates is false), since their possible sets are picked from a sub-set
-        const random = Math.random() < 0.5;
-
         // Set team sprites
         this.teamOneSprites = [];
         this.teamTwoSprites = [];
-        firstRandomizedTeam.forEach((el) => { random ? this.teamOneSprites.push(el.species.toLowerCase()) : this.teamTwoSprites.push(el.species.toLowerCase()); });
-        secondRandomizedTeam.forEach((el) => { random ? this.teamTwoSprites.push(el.species.toLowerCase()) : this.teamOneSprites.push(el.species.toLowerCase()); });
+        this.teamThreeSprites = [];
+        this.teamFourSprites = [];
+        const shuffled = !fourTeams ? this.getMultipleRandom([this.teamOneSprites, this.teamTwoSprites], 2) : 
+          this.getMultipleRandom([this.teamOneSprites, this.teamTwoSprites, this.teamThreeSprites, this.teamFourSprites], 4);
+        firstRandomizedTeam.forEach((el) => { shuffled[0].push(el.species.toLowerCase()) });
+        secondRandomizedTeam.forEach((el) => { shuffled[1].push(el.species.toLowerCase()); });
+        if (fourTeams) {
+          thirdRandomizedTeam.forEach((el) => { shuffled[2].push(el.species.toLowerCase()); });
+          fourthRandomizedTeam.forEach((el) => { shuffled[3].push(el.species.toLowerCase()); });
+        }
 
         // Now pack the 2 teams, then unpack & export
-        this.packToApi(firstRandomizedTeam, random ? 1 : 2);
-        this.packToApi(secondRandomizedTeam, !random ? 1 : 2);
+        this.packToApi(firstRandomizedTeam, 1);
+        this.packToApi(secondRandomizedTeam, 2);
+        if (fourTeams) {
+          this.packToApi(thirdRandomizedTeam, 3);
+          this.packToApi(fourthRandomizedTeam, 4);
+
+          this.showFourTeams = true;
+        }
       } else {
         this.snackBar.open('This format does not have enough Pokemon sets or unique species', 'ERROR', {
           duration: 5000
@@ -211,6 +247,10 @@ export class RandomizerComponent implements OnInit {
         this.teamOneTextControl.patchValue(fullString);
       } else if (team == 2) {
         this.teamTwoTextControl.patchValue(fullString);
+      } else if (team == 3) {
+        this.teamThreeTextControl.patchValue(fullString);
+      } else if (team == 4) {
+        this.teamFourTextControl.patchValue(fullString);
       }
     });
   }
@@ -227,5 +267,28 @@ export class RandomizerComponent implements OnInit {
     this.snackBar.open('Copied team 2 to clipboard', 'SUCCESS', {
       duration: 3000
     })
+  }
+
+  copyTeamThree() {
+    navigator.clipboard.writeText(this.teamThreeTextControl.value);
+    this.snackBar.open('Copied team 3 to clipboard', 'SUCCESS', {
+      duration: 3000
+    })
+  }
+
+  copyTeamFour() {
+    navigator.clipboard.writeText(this.teamFourTextControl.value);
+    this.snackBar.open('Copied team 4 to clipboard', 'SUCCESS', {
+      duration: 3000
+    })
+  }
+
+  toggleAllowDuplicates() {
+    if (this.randomizerForm.value['teamSpeciesReusableControl'] == true) {
+      this.randomizerForm.get('allowDuplicatesControl').enable();
+    } else {
+      this.randomizerForm.get('allowDuplicatesControl').patchValue(false);
+      this.randomizerForm.get('allowDuplicatesControl').disable();
+    }
   }
 }
