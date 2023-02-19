@@ -123,21 +123,21 @@ export class RandomizerComponent implements OnInit {
         this.teamTwoSprites = [];
         this.teamThreeSprites = [];
         this.teamFourSprites = [];
-        const shuffled = !fourTeams ? this.getMultipleRandom([this.teamOneSprites, this.teamTwoSprites], 2) : 
-          this.getMultipleRandom([this.teamOneSprites, this.teamTwoSprites, this.teamThreeSprites, this.teamFourSprites], 4);
-        firstRandomizedTeam.forEach((el) => { shuffled[0].push(el.species.toLowerCase()) });
-        secondRandomizedTeam.forEach((el) => { shuffled[1].push(el.species.toLowerCase()); });
+        const shuffled = !fourTeams ? this.getMultipleRandom([[this.teamOneSprites, 1], [this.teamTwoSprites, 2]], 2) : 
+          this.getMultipleRandom([[this.teamOneSprites, 1], [this.teamTwoSprites, 2], [this.teamThreeSprites, 3], [this.teamFourSprites, 4]], 4);
+        firstRandomizedTeam.forEach((el) => { shuffled[0][0].push(el.species.toLowerCase()); });
+        secondRandomizedTeam.forEach((el) => { shuffled[1][0].push(el.species.toLowerCase()); });
         if (fourTeams) {
-          thirdRandomizedTeam.forEach((el) => { shuffled[2].push(el.species.toLowerCase()); });
-          fourthRandomizedTeam.forEach((el) => { shuffled[3].push(el.species.toLowerCase()); });
+          thirdRandomizedTeam.forEach((el) => { shuffled[2][0].push(el.species.toLowerCase()); });
+          fourthRandomizedTeam.forEach((el) => { shuffled[3][0].push(el.species.toLowerCase()); });
         }
 
         // Now pack the 2 teams, then unpack & export
-        this.packToApi(firstRandomizedTeam, 1);
-        this.packToApi(secondRandomizedTeam, 2);
+        this.packToApi(firstRandomizedTeam, shuffled[0][1]);
+        this.packToApi(secondRandomizedTeam, shuffled[1][1]);
         if (fourTeams) {
-          this.packToApi(thirdRandomizedTeam, 3);
-          this.packToApi(fourthRandomizedTeam, 4);
+          this.packToApi(thirdRandomizedTeam, shuffled[2][1]);
+          this.packToApi(fourthRandomizedTeam, shuffled[3][1]);
 
           this.showFourTeams = true;
         }
