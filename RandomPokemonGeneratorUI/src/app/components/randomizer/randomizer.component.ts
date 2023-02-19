@@ -119,10 +119,10 @@ export class RandomizerComponent implements OnInit {
           // Remove duplicate sets & species by filtering on uniqueSpeciesSetsTuple[1]
           let filteredSets = uniqueSpeciesSetsTuple[1].filter(el => !firstRandomizedTeam.includes(el));
           secondRandomizedTeam = this.getMultipleRandom(filteredSets, countInput);
-
+          
           if (fourTeams) {
-            thirdRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !secondRandomizedTeam.includes(el)), countInput);
-            fourthRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !thirdRandomizedTeam.includes(el)), countInput);
+            thirdRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !firstRandomizedTeam.includes(el) || !secondRandomizedTeam.includes(el)), countInput);
+            fourthRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !firstRandomizedTeam.includes(el) || !secondRandomizedTeam.includes(el) || !thirdRandomizedTeam.includes(el)), countInput);
           }
         }
         // Randomize who gets which team as the 2nd team will have less variety (if allowDuplicates is false), since their possible sets are picked from a sub-set
