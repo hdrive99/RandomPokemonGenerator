@@ -3,25 +3,18 @@
         <div class="header-title">
             <h1>Randomizer</h1>
         </div>
-        <input type="checkbox" (change)="toggleVisibility = !toggleVisibility">
-        <small class="checkbox-text">(Unhide Sets)</small>
+        <mat-checkbox class="checkbox" type="checkbox" (change)="toggleVisibility = !toggleVisibility">(Unhide
+            Sets)</mat-checkbox>
         <small class="small-text">If duplicates aren't allowed, format must have at least double the sets you are
             generating.</small>
-        <mat-form-field>
-            <mat-select formControlName="allowDuplicatesControl" [errorStateMatcher]="matcher"
-                placeholder="Allow Duplicates?">
-                <mat-option value="0">
-                    No</mat-option>
-                <mat-option value="1">
-                    Yes</mat-option>
-            </mat-select>
-            <mat-error *ngIf="randomizerForm.get('allowDuplicatesControl').hasError('required')">
-                Allow Duplicates rule is <strong>required</strong>
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput class="generate-count-input" formControlName="countInputControl" type="text"
-                [errorStateMatcher]="matcher" placeholder="# of Sets to Generate">
+        <mat-checkbox class="checkbox" formControlName="allowDuplicatesControl" id="allowDuplicatesControl">Allow
+            Duplicate Sets</mat-checkbox>
+        <mat-checkbox class="checkbox" formControlName="teamSpeciesReusableControl"
+            id="teamSpeciesReusableControl">Allow
+            Duplicate Species</mat-checkbox>
+        <mat-form-field class="generator-inputs">
+            <input matInput formControlName="countInputControl" type="text" [errorStateMatcher]="matcher"
+                placeholder="# of Sets to Generate">
             <mat-error *ngIf="randomizerForm.get('countInputControl').hasError('required')">
                 # of Sets to Generate is <strong>required</strong>
             </mat-error>

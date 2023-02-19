@@ -10,16 +10,18 @@
 
 .checkbox, 
 .checkbox-text {
+    display: flex;
     align-self: center;
     font-size: x-small;
 }
 
 .small-text {
     align-self: end;
+    width: 13%;
 }
 
-.generate-count-input {
-    width: auto;
+.generator-inputs {
+    width: 10%;
 }
 
 .sprite-img {
