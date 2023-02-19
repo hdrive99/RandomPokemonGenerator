@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +22,7 @@ import { PokemonSetsComponent } from './components/pokemon-set/pokemon-sets/poke
 import { PokemonSetComponent } from './components/pokemon-set/pokemon-set/pokemon-set.component';
 import { RandomizerComponent } from './components/randomizer/randomizer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoadingComponent } from './components/shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormatListComponent,
     PokemonSetsComponent,
     PokemonSetComponent,
-    RandomizerComponent
+    RandomizerComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatSnackBarModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule
   ],

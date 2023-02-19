@@ -11,6 +11,7 @@ import { PokemonSet } from 'src/app/models/pokemon-set.model';
 import { FormatListService } from 'src/app/services/format-list.service';
 import { MyErrorStateMatcher } from 'src/app/services/my-error-state-matcher.service';
 import { PokemonSetService } from 'src/app/services/pokemon-set.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-format-list',
@@ -44,7 +45,8 @@ export class FormatListComponent implements OnInit {
     private route: ActivatedRoute,
     private formatListService: FormatListService,
     private pokemonSetService: PokemonSetService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +54,8 @@ export class FormatListComponent implements OnInit {
   }
 
   getFormatList() {
+    this.sharedService.startSpinner();
+
     this.formatListService.get(this.formatListId).subscribe((data) => {
       this.formatListName = data.name;
       if (data?.pokemonSets) {
@@ -68,11 +72,15 @@ export class FormatListComponent implements OnInit {
           this.formatListPokemonSetsIds.push(element.id);
         });
         this.getAllPokemonSetsFiltered();
+      } else {
+        this.sharedService.stopSpinner();
       }
     });
   }
 
   updateFormatList() {
+    this.sharedService.startSpinner();
+    
     let name = this.updateFormatListForm.value['updateFormatListControl']
     let model = new FormatListUpdate(this.formatListId, name);
     this.formatListService.update(model).subscribe((success) => {
@@ -82,11 +90,15 @@ export class FormatListComponent implements OnInit {
         this.snackBar.open('Either this name already exists, or an error occurred', 'ERROR', {
           duration: 5000
         })
+
+        this.sharedService.stopSpinner();
       }
     });
   }
 
   deleteFormatListPokemonSet(row) {
+    this.sharedService.startSpinner();
+
     let model = new FormatListPokemonSetAdd(this.formatListId, row.id);
     this.formatListService.deletePokemonSet(model).subscribe((success) => {
       if (success) {
@@ -95,6 +107,8 @@ export class FormatListComponent implements OnInit {
         this.snackBar.open('Something went wrong while deleting this pokemon set', 'ERROR', {
           duration: 5000
         })
+
+        this.sharedService.stopSpinner();
       }
     })
   }
@@ -108,6 +122,8 @@ export class FormatListComponent implements OnInit {
   }
 
   addFormatListPokemonSet() {
+    this.sharedService.startSpinner();
+    
     let pokemonSetId = this.formatListPokemonSetAddForm.value['formatListPokemonSetAddControl'];
     var model: FormatListPokemonSetAdd = {
       formatListId: this.formatListId,
@@ -121,6 +137,8 @@ export class FormatListComponent implements OnInit {
         this.snackBar.open('Something went wrong while adding this pokemon set', 'ERROR', {
           duration: 5000
         })
+
+        this.sharedService.stopSpinner();
       }
     });
   }
@@ -136,6 +154,8 @@ export class FormatListComponent implements OnInit {
       if (this.shouldScrollToBottom) {
         this.scrollToBottom();
       }
+
+      this.sharedService.stopSpinner();
     });
   }
   

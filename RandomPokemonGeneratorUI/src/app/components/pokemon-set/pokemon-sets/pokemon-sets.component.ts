@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { PokemonSetAdd } from 'src/app/models/pokemon-set-add.model';
 import { MyErrorStateMatcher } from 'src/app/services/my-error-state-matcher.service';
 import { PokemonSetService } from 'src/app/services/pokemon-set.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-pokemon-sets',
@@ -31,7 +32,8 @@ export class PokemonSetsComponent implements OnInit {
   constructor(
     private pokemonSetService: PokemonSetService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,8 @@ export class PokemonSetsComponent implements OnInit {
   }
 
   getAllPokemonSets() {
+    this.sharedService.startSpinner();
+
     this.pokemonSetService.getAllTruncated().pipe(
       map((data) => {
         data.forEach(element => {
@@ -53,11 +57,17 @@ export class PokemonSetsComponent implements OnInit {
         this.sort.sort(({ id: 'species', start: 'asc' }) as MatSortable);
         this.dataSource.sort = this.sort;
         this.firstRun = false;
+        
+        this.sharedService.stopSpinner();
+      } else {
+        this.sharedService.stopSpinner();
       }
     });
   }
 
   addPokemonSet() {
+    this.sharedService.startSpinner();
+
     let setName = this.pokemonSetForm.value['pokemonSetControl'];
     var model: PokemonSetAdd = {
         setName: setName,
@@ -88,11 +98,15 @@ export class PokemonSetsComponent implements OnInit {
         this.snackBar.open('Either this set name already exists, or an error occurred', 'ERROR', {
           duration: 5000
         })
+
+        this.sharedService.stopSpinner();
       }
     });
   }
 
   deletePokemonSet(row) {
+    this.sharedService.startSpinner();
+
     this.pokemonSetService.delete(row.id).subscribe((success) => {
       if (success) {
         this.getAllPokemonSets();
@@ -100,6 +114,8 @@ export class PokemonSetsComponent implements OnInit {
         this.snackBar.open('Something went wrong while deleting this pokemon set', 'ERROR', {
           duration: 5000
         })
+
+        this.sharedService.stopSpinner();
       }
     })
   }

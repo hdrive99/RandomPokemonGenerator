@@ -6,6 +6,7 @@ import { PokemonSet } from 'src/app/models/pokemon-set.model';
 import { FormatListService } from 'src/app/services/format-list.service';
 import { MyErrorStateMatcher } from 'src/app/services/my-error-state-matcher.service';
 import { PokemonSetService } from 'src/app/services/pokemon-set.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-randomizer',
@@ -42,7 +43,8 @@ export class RandomizerComponent implements OnInit {
   constructor(
     private formatListService: FormatListService,
     private pokemonSetService: PokemonSetService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -64,12 +66,18 @@ export class RandomizerComponent implements OnInit {
   }
 
   getAllFilterLists() {
+    this.sharedService.startSpinner();
+
     this.formatListService.getAll().subscribe((data) => {
       this.allFormatLists = data;
+
+      this.sharedService.stopSpinner();
     });
   }
   
   runRandomizer(fetchWithoutRandomizing?: boolean, fourTeams?: boolean) {
+    this.sharedService.startSpinner();
+    
     if (!fourTeams) { this.showFourTeams = false; }
 
     // Get inputted FormatList, determine if there are enough PokemonSets, then randomly copies sets from it
@@ -152,6 +160,8 @@ export class RandomizerComponent implements OnInit {
         this.teamTwoTextControl.patchValue('');
         this.teamOneRowLength = 23;
         this.teamTwoRowLength = 23;
+
+        this.sharedService.stopSpinner();
       }
     });
   }
@@ -252,6 +262,8 @@ export class RandomizerComponent implements OnInit {
       } else if (team == 4) {
         this.teamFourTextControl.patchValue(fullString);
       }
+
+      this.sharedService.stopSpinner();
     });
   }
 
