@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RandomPokemonGenerator.Web.Dtos.PokemonSet;
+using RandomPokemonGenerator.Web.Handlers;
 using RandomPokemonGenerator.Web.Services;
+using System.Net;
 
 namespace RandomPokemonGenerator.Web.Controllers
 {
@@ -22,17 +24,38 @@ namespace RandomPokemonGenerator.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GetPokemonSetDto>>> GetAllPokemonSets()
         {
-            return Ok(await _pokemonSetService.GetAllPokemonSets());
+            if (CachingHandler.IsCacheFreshHandler(Response, Request))
+            {
+                return this.StatusCode((int)HttpStatusCode.NotModified);
+            }
+            else
+            {
+                return Ok(await _pokemonSetService.GetAllPokemonSets());
+            }
         }
         [HttpGet("GetTruncated")]
         public async Task<ActionResult<List<GetTruncatedPokemonSetDto>>> GetAllTruncatedPokemonSets()
         {
-            return Ok(await _pokemonSetService.GetAllTruncatedPokemonSets());
+            if (CachingHandler.IsCacheFreshHandler(Response, Request))
+            {
+                return this.StatusCode((int)HttpStatusCode.NotModified);
+            }
+            else
+            {
+                return Ok(await _pokemonSetService.GetAllTruncatedPokemonSets());
+            }
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPokemonSetDto>> GetPokemonSetById(int id)
         {
-            return Ok(await _pokemonSetService.GetPokemonSetById(id));
+            if (CachingHandler.IsCacheFreshHandler(Response, Request))
+            {
+                return this.StatusCode((int)HttpStatusCode.NotModified);
+            }
+            else
+            {
+                return Ok(await _pokemonSetService.GetPokemonSetById(id));
+            }
         }
         [HttpPut]
         public async Task<ActionResult<bool>> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet)

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RandomPokemonGenerator.Web.Data;
+using RandomPokemonGenerator.Web.Extensions;
 using RandomPokemonGenerator.Web.Services;
 using System.Text.Json.Serialization;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddResponseCaching();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
@@ -32,6 +34,10 @@ else
 {
     app.UseCors();
 }
+
+app.UseResponseCaching();
+
+app.ConfigureCachingHandler();
 
 app.UseAuthorization();
 

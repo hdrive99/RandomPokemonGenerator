@@ -25,15 +25,15 @@ export class PokemonSetService {
   }
 
   getAll(): Observable<PokemonSet[]> {
-    return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet`);
+    return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet`, { observe: 'body' });
   }
 
   getAllTruncated(): Observable<PokemonSet[]> {
-    return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet/GetTruncated`);
+    return this.http.get<PokemonSet[]>(`${environment.BASE_API_PATH}/PokemonSet/GetTruncated`, { observe: 'body' });
   }
 
   get(pokemonSetId: number): Observable<PokemonSet> {
-    return this.http.get<PokemonSet>(`${environment.BASE_API_PATH}/PokemonSet/${pokemonSetId}`);
+    return this.http.get<PokemonSet>(`${environment.BASE_API_PATH}/PokemonSet/${pokemonSetId}`, { observe: 'body' });
   }
 
   update(model: PokemonSetUpdate): Observable<boolean> {
@@ -45,15 +45,15 @@ export class PokemonSetService {
   }
 
   deleteFormatList(model: PokemonSetFormatListAdd): Observable<boolean> {
-    return this.http.request<boolean>('delete', `${environment.BASE_API_PATH}/PokemonSet/FormatList`, {body: model});
+    return this.http.request<boolean>('delete', `${environment.BASE_API_PATH}/PokemonSet/FormatList`, { body: model });
   }
 
   // Returns array of JSON objects containing imported sets that are mapped to PokemonSet properties
   importPokemonSet(importSet): Observable<any[]> {
-    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/importSet`, {model: importSet});
+    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/importSet`, { model: importSet });
   }
 
   unpackAndExportSets(exportSet): Observable<any> {
-    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/unpackAndExportSets`, {model: exportSet});
+    return this.http.post<any>(`${environment.SHOWDOWN_LOCAL_SERVER_PATH}/unpackAndExportSets`, { model: exportSet });
   }
 }

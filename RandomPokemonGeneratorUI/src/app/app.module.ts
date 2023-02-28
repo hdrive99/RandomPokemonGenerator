@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
@@ -23,6 +23,8 @@ import { PokemonSetComponent } from './components/pokemon-set/pokemon-set/pokemo
 import { RandomizerComponent } from './components/randomizer/randomizer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingComponent } from './components/shared/loading/loading.component';
+import { HttpRequestInterceptor } from './interceptors/http-request-interceptor';
+import { HttpResponseInterceptor } from './interceptors/http-response.interceptor';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,15 @@ import { LoadingComponent } from './components/shared/loading/loading.component'
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [HttpClient],
+  providers: [
+    HttpClient,
+    {
+      provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

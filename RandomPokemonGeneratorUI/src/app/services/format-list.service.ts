@@ -25,11 +25,11 @@ export class FormatListService {
   }
 
   getAll(): Observable<FormatList[]> {
-    return this.http.get<FormatList[]>(`${environment.BASE_API_PATH}/FormatList`);
+    return this.http.get<FormatList[]>(`${environment.BASE_API_PATH}/FormatList`, { observe: 'body' });
   }
 
   get(formatListId: number): Observable<FormatList> {
-    return this.http.get<FormatList>(`${environment.BASE_API_PATH}/FormatList/${formatListId}`);
+    return this.http.get<FormatList>(`${environment.BASE_API_PATH}/FormatList/${formatListId}`, { observe: 'body' });
   }
 
   update(model: FormatListUpdate): Observable<boolean> {
@@ -41,6 +41,6 @@ export class FormatListService {
   }
 
   deletePokemonSet(model: FormatListPokemonSetAdd): Observable<boolean> {
-    return this.http.request<boolean>('delete', `${environment.BASE_API_PATH}/FormatList/PokemonSet`, {body: model});
+    return this.http.request<boolean>('delete', `${environment.BASE_API_PATH}/FormatList/PokemonSet`, { body: model });
   }
 }

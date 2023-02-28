@@ -16,6 +16,17 @@ export class SharedService {
     this.loadSubject.next(data);
   }
 
+  private _lastModified$ = new BehaviorSubject<boolean>(true);
+  lastModified$ = this._lastModified$.asObservable();
+
+  public get lastModified(): boolean {
+    return this._lastModified$.getValue();
+  }
+
+  public set lastModified(data: boolean) {
+    this._lastModified$.next(data);
+  }
+
   startSpinner() {
     this.loading = true;
     document.getElementById("loading-overlay").style.display = "block";
