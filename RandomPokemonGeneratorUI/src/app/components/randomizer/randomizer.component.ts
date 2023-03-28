@@ -17,8 +17,8 @@ export class RandomizerComponent implements OnInit {
   randomizerForm = new FormGroup({
     allowDuplicatesControl: new FormControl(),
     teamSpeciesReusableControl: new FormControl(),
-    countInputControl: new FormControl('', [ Validators.required, Validators.min(1) ]),
-    formatListControl: new FormControl('', [ Validators.required ])
+    countInputControl: new FormControl(6, [Validators.required, Validators.min(1)]),
+    formatListControl: new FormControl('', [Validators.required])
   });
   matcher = new MyErrorStateMatcher();
   allFormatLists: FormatList[];
@@ -27,10 +27,10 @@ export class RandomizerComponent implements OnInit {
   teamTwoSprites = [];
   teamThreeSprites = [];
   teamFourSprites = [];
-  teamOneTextControl = new FormControl({value: '', disabled: true}, []);
-  teamTwoTextControl = new FormControl({value: '', disabled: true}, []);
-  teamThreeTextControl = new FormControl({value: '', disabled: true}, []);
-  teamFourTextControl = new FormControl({value: '', disabled: true}, []);
+  teamOneTextControl = new FormControl({ value: '', disabled: true }, []);
+  teamTwoTextControl = new FormControl({ value: '', disabled: true }, []);
+  teamThreeTextControl = new FormControl({ value: '', disabled: true }, []);
+  teamFourTextControl = new FormControl({ value: '', disabled: true }, []);
   teamOneRowLength = 23;
   teamTwoRowLength = 23;
   teamThreeRowLength = 23;
@@ -74,10 +74,10 @@ export class RandomizerComponent implements OnInit {
       this.sharedService.stopSpinner();
     });
   }
-  
+
   runRandomizer(fetchWithoutRandomizing?: boolean, fourTeams?: boolean) {
     this.sharedService.startSpinner();
-    
+
     if (!fourTeams) { this.showFourTeams = false; }
 
     // Get inputted FormatList, determine if there are enough PokemonSets, then randomly copies sets from it
@@ -86,7 +86,7 @@ export class RandomizerComponent implements OnInit {
       let allowDuplicates = this.randomizerForm.value['allowDuplicatesControl'];
       let teamSpeciesReusable = this.randomizerForm.value['teamSpeciesReusableControl'];
       allowDuplicates = fetchWithoutRandomizing ? true : allowDuplicates;
-      
+
       // Limit 1 species per team
       let uniqueSpeciesSetsTuple;
       if (!fetchWithoutRandomizing) {
@@ -119,7 +119,7 @@ export class RandomizerComponent implements OnInit {
           // Remove duplicate sets & species by filtering on uniqueSpeciesSetsTuple[1]
           let filteredSets = uniqueSpeciesSetsTuple[1].filter(el => !firstRandomizedTeam.includes(el));
           secondRandomizedTeam = this.getMultipleRandom(filteredSets, countInput);
-          
+
           if (fourTeams) {
             thirdRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !firstRandomizedTeam.includes(el) || !secondRandomizedTeam.includes(el)), countInput);
             fourthRandomizedTeam = this.getMultipleRandom(filteredSets.filter(el => !firstRandomizedTeam.includes(el) || !secondRandomizedTeam.includes(el) || !thirdRandomizedTeam.includes(el)), countInput);
@@ -131,7 +131,7 @@ export class RandomizerComponent implements OnInit {
         this.teamTwoSprites = [];
         this.teamThreeSprites = [];
         this.teamFourSprites = [];
-        const shuffled = !fourTeams ? this.getMultipleRandom([[this.teamOneSprites, 1], [this.teamTwoSprites, 2]], 2) : 
+        const shuffled = !fourTeams ? this.getMultipleRandom([[this.teamOneSprites, 1], [this.teamTwoSprites, 2]], 2) :
           this.getMultipleRandom([[this.teamOneSprites, 1], [this.teamTwoSprites, 2], [this.teamThreeSprites, 3], [this.teamFourSprites, 4]], 4);
         firstRandomizedTeam.forEach((el) => { shuffled[0][0].push(el.species.toLowerCase()); });
         secondRandomizedTeam.forEach((el) => { shuffled[1][0].push(el.species.toLowerCase()); });
@@ -199,9 +199,9 @@ export class RandomizerComponent implements OnInit {
     data.forEach((el) => { // Store tera types
       teraTypes.push(el.terastallizeType != null ? `Tera Type: ${el.terastallizeType}` : false);
     });
-    
+
     let model = '';
-    
+
     data.forEach((el) => {
       model += `` +
         `${el['name'] != null ? el['name'] : ''}` + `|` +
@@ -228,7 +228,7 @@ export class RandomizerComponent implements OnInit {
         `${el['speIndividualValue'] != null ? el['speIndividualValue'] : 31}` + `|` +
         `|` + // shiny
         el['level'] + `|` // can be null
-      + `]`; // happiness, pokeball, hidden power, gigantamax, dynamax level, tera type & then more Pokemon
+        + `]`; // happiness, pokeball, hidden power, gigantamax, dynamax level, tera type & then more Pokemon
     });
 
     model = model.slice(0, model.length - 1); // Get rid of trailing ]
@@ -247,12 +247,12 @@ export class RandomizerComponent implements OnInit {
       let fullString = '';
       for (let i = 0; i < teraTypes.length; i++) {
         if (teraTypes[i]) { ////////////// also maybe change indices[i+1] + n <---- n to a different value
-          fullString += data.slice(indices[i], indices[i+1] + 1) + teraTypes[i];
+          fullString += data.slice(indices[i], indices[i + 1] + 1) + teraTypes[i];
         } else { // If teraTypes[i] = false, don't add anything
-          fullString += data.slice(indices[i], indices[i+1]);
+          fullString += data.slice(indices[i], indices[i + 1]);
         }
       }
-      
+
       if (team == 1) {
         this.teamOneTextControl.patchValue(fullString);
       } else if (team == 2) {

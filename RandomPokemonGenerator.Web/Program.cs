@@ -37,7 +37,7 @@ else
 
 app.UseResponseCaching();
 
-app.ConfigureCachingHandler();
+app.ConfigureCachingMiddleware();
 
 app.UseAuthorization();
 

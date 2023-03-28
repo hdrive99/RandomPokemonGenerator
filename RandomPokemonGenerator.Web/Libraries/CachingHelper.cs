@@ -6,7 +6,6 @@ namespace RandomPokemonGenerator.Web.Libraries
     {
         private static DateTime lastModDate = DateTime.UtcNow;
         private static TimeSpan refreshInterval = TimeSpan.FromSeconds(31536000);
-
         public static DateTime LastModDate { get { return lastModDate; } set { lastModDate = value; } }
         public static TimeSpan RefreshInterval { get { return refreshInterval; } set { refreshInterval = value; } }
         public static CacheProperties ShouldValidateCache(HttpRequest request)
@@ -16,7 +15,7 @@ namespace RandomPokemonGenerator.Web.Libraries
 
             if (!StringValues.IsNullOrEmpty(ifModSince))
             {
-                RefreshLastMod();
+                RefreshLastModIfExpired();
 
                 bool isCacheFresh = lastModDate <= DateTime.Parse(ifModSince);
 
@@ -28,16 +27,16 @@ namespace RandomPokemonGenerator.Web.Libraries
             }
         }
 
-        public static void InvalidateCache()
+        public static void RefreshLastMod()
         {
             lastModDate = DateTime.UtcNow;
         }
 
-        private static void RefreshLastMod()
+        private static void RefreshLastModIfExpired()
         {
             if (DateTime.UtcNow - lastModDate >= refreshInterval)
             {
-                InvalidateCache();
+                RefreshLastMod();
             }
         }
     }
