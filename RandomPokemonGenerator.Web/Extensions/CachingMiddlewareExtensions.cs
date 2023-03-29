@@ -11,7 +11,7 @@ namespace RandomPokemonGenerator.Web.Extensions
                 if (context.Request.Method.Equals("PUT") || context.Request.Method.Equals("POST") ||
                     context.Request.Method.Equals("DELETE") || context.Request.Method.Equals("PATCH"))
                 {
-                    CachingHelper.RefreshLastMod();
+                    CachingHelper.InvalidateLastMod();
                 }
 
                 await next();

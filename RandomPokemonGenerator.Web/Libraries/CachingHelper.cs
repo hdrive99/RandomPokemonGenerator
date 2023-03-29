@@ -15,28 +15,42 @@ namespace RandomPokemonGenerator.Web.Libraries
 
             if (!StringValues.IsNullOrEmpty(ifModSince))
             {
-                RefreshLastModIfExpired();
+                InvalidateLastModIfExpired();
 
                 bool isCacheFresh = lastModDate <= DateTime.Parse(ifModSince);
+
+                if (!isCacheFresh)
+                {
+                    // Refresh lastModDate if cache is invalidated (when lastModDate has expired or data is updated)
+                    lastModDate = DateTime.UtcNow;
+                }
 
                 return new CacheProperties() { IsCacheFresh = isCacheFresh, RefreshInterval = refreshInterval, LastModified = lastModDate };
             }
             else
             {
+                // Refresh lastModDate if cache is invalidated (when no ifModSince request header exists)
+                lastModDate = DateTime.UtcNow;
                 return new CacheProperties() { IsCacheFresh = false, RefreshInterval = refreshInterval, LastModified = lastModDate };
             }
         }
 
-        public static void RefreshLastMod()
+        /// <summary>
+        /// Forces cache revalidation by maximizing lastModDate, used in ShouldValidateCache()
+        /// </summary>
+        public static void InvalidateLastMod()
         {
-            lastModDate = DateTime.UtcNow;
+            lastModDate = DateTime.MaxValue; // DateTime.UtcNow.AddSeconds(refreshInterval.TotalSeconds)
         }
 
-        private static void RefreshLastModIfExpired()
+        /// <summary>
+        /// Forces cache revalidation if the DateTime.UtcNow is past lastModDate's expiry date
+        /// </summary>
+        private static void InvalidateLastModIfExpired()
         {
             if (DateTime.UtcNow - lastModDate >= refreshInterval)
             {
-                RefreshLastMod();
+                InvalidateLastMod();
             }
         }
     }
