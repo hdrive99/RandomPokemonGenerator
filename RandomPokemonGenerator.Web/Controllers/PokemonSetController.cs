@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using RandomPokemonGenerator.Web.Dtos.PokemonSet;
-using RandomPokemonGenerator.Web.Handlers;
+using RandomPokemonGenerator.Web.Libraries.Interfaces;
 using RandomPokemonGenerator.Web.Services;
-using System.Net;
 
 namespace RandomPokemonGenerator.Web.Controllers
 {
@@ -11,71 +11,66 @@ namespace RandomPokemonGenerator.Web.Controllers
     public class PokemonSetController : ControllerBase
     {
         private readonly IPokemonSetService _pokemonSetService;
-        public PokemonSetController(IPokemonSetService pokemonSetService)
+        private readonly ICachingHelper _cache;
+        
+        public PokemonSetController(IPokemonSetService pokemonSetService, ICachingHelper cache)
         {
             _pokemonSetService = pokemonSetService;
+            _cache = cache;
         }
 
         [HttpPost]
         public async Task<ActionResult<int>> AddPokemonSet(AddPokemonSetDto newPokemonSet)
         {
-            return Ok(await _pokemonSetService.AddPokemonSet(newPokemonSet));
+            var result = await _pokemonSetService.AddPokemonSet(newPokemonSet);
+            await _cache.InvalidateCache("Get");
+            return Ok(result);
         }
         [HttpGet]
+        [OutputCache(PolicyName = "GetTagPolicy")]
         public async Task<ActionResult<List<GetPokemonSetDto>>> GetAllPokemonSets()
         {
-            if (CachingHandler.IsCacheFreshHandler(Response, Request))
-            {
-                return this.StatusCode((int)HttpStatusCode.NotModified);
-            }
-            else
-            {
-                return Ok(await _pokemonSetService.GetAllPokemonSets());
-            }
+            return Ok(await _pokemonSetService.GetAllPokemonSets());
         }
         [HttpGet("GetTruncated")]
+        [OutputCache(PolicyName = "GetTagPolicy")]
         public async Task<ActionResult<List<GetTruncatedPokemonSetDto>>> GetAllTruncatedPokemonSets()
         {
-            if (CachingHandler.IsCacheFreshHandler(Response, Request))
-            {
-                return this.StatusCode((int)HttpStatusCode.NotModified);
-            }
-            else
-            {
-                return Ok(await _pokemonSetService.GetAllTruncatedPokemonSets());
-            }
+            return Ok(await _pokemonSetService.GetAllTruncatedPokemonSets());
         }
         [HttpGet("{id}")]
+        [OutputCache(PolicyName = "GetTagPolicy")]
         public async Task<ActionResult<GetPokemonSetDto>> GetPokemonSetById(int id)
         {
-            if (CachingHandler.IsCacheFreshHandler(Response, Request))
-            {
-                return this.StatusCode((int)HttpStatusCode.NotModified);
-            }
-            else
-            {
-                return Ok(await _pokemonSetService.GetPokemonSetById(id));
-            }
+            return Ok(await _pokemonSetService.GetPokemonSetById(id));
         }
         [HttpPut]
         public async Task<ActionResult<bool>> UpdatePokemonSet(UpdatePokemonSetDto updatedPokemonSet)
         {
-            return Ok(await _pokemonSetService.UpdatePokemonSet(updatedPokemonSet));
+            var result = await _pokemonSetService.UpdatePokemonSet(updatedPokemonSet);
+            await _cache.InvalidateCache("Get");
+            return Ok(result);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeletePokemonSet(int id)
         {
-            return Ok(await _pokemonSetService.DeletePokemonSet(id));
+            var result = await _pokemonSetService.DeletePokemonSet(id);
+            await _cache.InvalidateCache("Get");
+            return Ok(result);
         }
         [HttpPost("FormatList")]
         public async Task<ActionResult<bool>> AddPokemonSetFormatList(AddPokemonSetFormatListDto newPokemonSetFormatList)
         {
-            return Ok(await _pokemonSetService.AddPokemonSetFormatList(newPokemonSetFormatList));
+            var result = await _pokemonSetService.AddPokemonSetFormatList(newPokemonSetFormatList);
+            await _cache.InvalidateCache("Get");
+            return Ok(result);
         }
         [HttpDelete("FormatList")]
         public async Task<ActionResult<bool>> DeletePokemonSetFormatList(AddPokemonSetFormatListDto deletePokemonSetFormatList)
         {
-            return Ok(await _pokemonSetService.DeletePokemonSetFormatList(deletePokemonSetFormatList));
+            var result = await _pokemonSetService.DeletePokemonSetFormatList(deletePokemonSetFormatList);
+            await _cache.InvalidateCache("Get");
+            return Ok(result);
         }
     }
 }

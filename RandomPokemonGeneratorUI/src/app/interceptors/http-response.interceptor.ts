@@ -18,15 +18,15 @@ export class HttpResponseInterceptor implements HttpInterceptor {
   ) { }
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (req.method !== 'GET') {
-      return next.handle(req);
-    }
+    // if (req.method !== 'GET') {
+    return next.handle(req);
+    // }
 
-    return next.handle(req).pipe(
-      filter(event => event instanceof HttpResponse),
-      tap((event: HttpResponse<any>) => {
-        this.localStorageService.setItem('Last-Modified ' + event.url, event.headers.get('Last-Modified'));
-      })
-    )
+    // return next.handle(req).pipe(
+    //   filter(event => event instanceof HttpResponse),
+    //   tap((event: HttpResponse<any>) => {
+    //     this.localStorageService.setItem('Last-Modified ' + event.url, event.headers.get('Last-Modified'));
+    //   })
+    // )
   }
 }
